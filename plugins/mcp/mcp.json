@@ -1,6 +1,7 @@
 {
   "mcpServers": {
     "quicknode": {
+      "type": "http",
       "url": "https://mcp.quicknode.com/mcp"
     }
   }

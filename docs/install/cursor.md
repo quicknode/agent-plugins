@@ -3,10 +3,10 @@
 One-click install via deeplink:
 
 <!-- BEGIN: generated-deeplink -->
-[![Add Quicknode MCP to Cursor](https://img.shields.io/badge/Add_to_Cursor-black?style=for-the-badge&logo=cursor)](cursor://anysphere.cursor-deeplink/mcp/install?name=quicknode&config=eyJ1cmwiOiJodHRwczovL21jcC5xdWlja25vZGUuY29tL21jcCJ9)
+[![Add Quicknode MCP to Cursor](https://img.shields.io/badge/Add_to_Cursor-black?style=for-the-badge&logo=cursor)](cursor://anysphere.cursor-deeplink/mcp/install?name=quicknode&config=eyJ0eXBlIjoiaHR0cCIsInVybCI6Imh0dHBzOi8vbWNwLnF1aWNrbm9kZS5jb20vbWNwIn0=)
 
 ```
-cursor://anysphere.cursor-deeplink/mcp/install?name=quicknode&config=eyJ1cmwiOiJodHRwczovL21jcC5xdWlja25vZGUuY29tL21jcCJ9
+cursor://anysphere.cursor-deeplink/mcp/install?name=quicknode&config=eyJ0eXBlIjoiaHR0cCIsInVybCI6Imh0dHBzOi8vbWNwLnF1aWNrbm9kZS5jb20vbWNwIn0=
 ```
 <!-- END: generated-deeplink -->
 
