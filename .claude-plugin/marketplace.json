@@ -1,0 +1,20 @@
+{
+  "name": "agent-plugins",
+  "owner": {
+    "name": "Quicknode",
+    "url": "https://www.quicknode.com"
+  },
+  "metadata": {
+    "description": "AI agent plugins for Quicknode blockchain infrastructure — MCP servers, skills, and more.",
+    "version": "1.0.0",
+    "repository": "https://github.com/quicknode/agent-plugins"
+  },
+  "plugins": [
+    {
+      "name": "mcp",
+      "description": "OAuth-secured remote MCP server for managing Quicknode infrastructure: endpoints, rate limits, security, metrics, billing.",
+      "source": "./plugins/mcp",
+      "strict": false
+    }
+  ]
+}
