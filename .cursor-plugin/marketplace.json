@@ -6,7 +6,8 @@
   },
   "metadata": {
     "description": "AI agent plugins for Quicknode blockchain infrastructure — MCP servers, skills, and more.",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "repository": "https://github.com/quicknode/agent-plugins"
   },
   "plugins": [
     {

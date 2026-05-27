@@ -5,10 +5,11 @@ This repo publishes the `mcp` plugin to the [official MCP Registry](https://regi
 ## Cut a release
 
 1. Bump `version` in:
-   - [`plugins/mcp/server.json`](../plugins/mcp/server.json)
    - [`plugins/mcp/.cursor-plugin/plugin.json`](../plugins/mcp/.cursor-plugin/plugin.json)
    - [`.cursor-plugin/marketplace.json`](../.cursor-plugin/marketplace.json) (`metadata.version`)
    - [`.claude-plugin/marketplace.json`](../.claude-plugin/marketplace.json) (`metadata.version`)
+
+   `plugins/mcp/server.json`'s `version` is auto-synced from the git tag by the publish workflow — don't bump it manually.
 2. Re-run the deeplink generator if any URL changed:
    ```bash
    node scripts/gen-install-links.mjs
