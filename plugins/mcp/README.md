@@ -21,6 +21,7 @@ Manual config (works for any client supporting remote MCP):
 {
   "mcpServers": {
     "quicknode": {
+      "type": "http",
       "url": "https://mcp.quicknode.com/mcp"
     }
   }

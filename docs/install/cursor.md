@@ -20,6 +20,7 @@ Edit `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project) and add:
 {
   "mcpServers": {
     "quicknode": {
+      "type": "http",
       "url": "https://mcp.quicknode.com/mcp"
     }
   }
