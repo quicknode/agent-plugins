@@ -1,12 +1,12 @@
-# QuickNode Agent Plugins
+# Quicknode Agent Plugins
 
-Distribution surface for QuickNode's AI agent plugins — MCP servers, skills, prompts, and rules — across IDE marketplaces.
+Distribution surface for Quicknode's AI agent plugins — MCP servers, skills, prompts, and rules — across IDE marketplaces.
 
 ## Available plugins
 
 | Plugin | Description |
 |---|---|
-| [`remote-mcp`](./plugins/remote-mcp/) | OAuth-secured remote MCP server for managing QuickNode infrastructure — endpoints, rate limits, security, metrics, billing. |
+| [`remote-mcp`](./plugins/remote-mcp/) | OAuth-secured remote MCP server for managing Quicknode infrastructure — endpoints, rate limits, security, metrics, billing. |
 
 ## Install
 

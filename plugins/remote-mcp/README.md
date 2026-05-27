@@ -1,6 +1,6 @@
-# QuickNode Remote MCP
+# Quicknode Remote MCP
 
-OAuth-secured remote MCP server for managing your QuickNode blockchain infrastructure from any MCP-compatible AI assistant.
+OAuth-secured remote MCP server for managing your Quicknode blockchain infrastructure from any MCP-compatible AI assistant.
 
 - **Endpoint**: `https://mcp.quicknode.com/mcp`
 - **Transport**: Streamable HTTP (stateless)
@@ -33,7 +33,7 @@ On first connection, the client performs DCR against `https://mcp.quicknode.com/
 
 | Tool | Purpose |
 |---|---|
-| `list-endpoints` | List your QuickNode endpoints |
+| `list-endpoints` | List your Quicknode endpoints |
 | `get-endpoint` | Get details for one endpoint |
 | `create-endpoint` | Provision a new endpoint |
 | `delete-endpoint` | Decommission an endpoint |
@@ -54,7 +54,7 @@ On first connection, the client performs DCR against `https://mcp.quicknode.com/
 
 ## Requirements
 
-A QuickNode account. Sign up at [quicknode.com](https://www.quicknode.com).
+A Quicknode account. Sign up at [quicknode.com](https://www.quicknode.com).
 
 ## License
 

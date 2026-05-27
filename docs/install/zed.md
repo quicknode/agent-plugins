@@ -1,4 +1,4 @@
-# Add QuickNode Remote MCP to Zed
+# Add Quicknode Remote MCP to Zed
 
 ## Recommended: stdio bridge via `mcp-remote`
 
@@ -39,10 +39,10 @@ Note: Zed uses `context_servers` (not `mcpServers`).
 
 ## What you get
 
-Tools for managing QuickNode endpoints, rate limits, security rules, metrics, billing, RPC usage, and supported chains. See the [plugin README](../../plugins/remote-mcp/README.md) for the full tool list.
+Tools for managing Quicknode endpoints, rate limits, security rules, metrics, billing, RPC usage, and supported chains. See the [plugin README](../../plugins/remote-mcp/README.md) for the full tool list.
 
 ## Requirements
 
 - Zed with the AI assistant enabled.
 - Node.js installed (for `npx` to fetch `mcp-remote`) — only needed for the stdio bridge.
-- A QuickNode account — sign up at [quicknode.com](https://www.quicknode.com).
+- A Quicknode account — sign up at [quicknode.com](https://www.quicknode.com).

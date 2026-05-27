@@ -11,7 +11,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, "..");
 
 const PLUGIN_NAME = "quicknode";
-const PLUGIN_DISPLAY = "QuickNode Remote MCP";
+const PLUGIN_DISPLAY = "Quicknode Remote MCP";
 const WINDSURF_REGISTRY_NAME = "quicknode-remote-mcp";
 
 const mcpJson = JSON.parse(
@@ -71,7 +71,7 @@ replaceBlock(
 ${windsurfDeeplink}
 \`\`\`
 
-> Requires the QuickNode MCP server to be listed in Windsurf's MCP registry first. Until then, use the manual config below.`
+> Requires the Quicknode MCP server to be listed in Windsurf's MCP registry first. Until then, use the manual config below.`
 );
 
 console.log("\nDone.");

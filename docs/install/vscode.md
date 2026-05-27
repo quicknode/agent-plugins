@@ -1,4 +1,4 @@
-# Add QuickNode Remote MCP to VS Code
+# Add Quicknode Remote MCP to VS Code
 
 ## Via the `@mcp` gallery
 
@@ -8,7 +8,7 @@ In VS Code's Extensions view (`Ctrl+Shift+X` / `Cmd+Shift+X`), search:
 @mcp quicknode
 ```
 
-The QuickNode Remote MCP listing is ingested automatically from the [official MCP Registry](https://registry.modelcontextprotocol.io/). Click **Install**.
+The Quicknode Remote MCP listing is ingested automatically from the [official MCP Registry](https://registry.modelcontextprotocol.io/). Click **Install**.
 
 ## Via CLI
 
@@ -37,10 +37,10 @@ On first connection, VS Code performs OAuth 2.1 + Dynamic Client Registration ag
 
 ## What you get
 
-Tools for managing QuickNode endpoints, rate limits, security rules, metrics, billing, RPC usage, and supported chains. See the [plugin README](../../plugins/remote-mcp/README.md) for the full tool list.
+Tools for managing Quicknode endpoints, rate limits, security rules, metrics, billing, RPC usage, and supported chains. See the [plugin README](../../plugins/remote-mcp/README.md) for the full tool list.
 
 ## Requirements
 
 - VS Code 1.99+ (native MCP support).
 - GitHub Copilot or another MCP-aware AI assistant inside VS Code.
-- A QuickNode account — sign up at [quicknode.com](https://www.quicknode.com).
+- A Quicknode account — sign up at [quicknode.com](https://www.quicknode.com).

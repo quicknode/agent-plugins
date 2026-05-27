@@ -1,10 +1,10 @@
 {
   "name": "remote-mcp",
-  "displayName": "QuickNode Remote MCP",
+  "displayName": "Quicknode Remote MCP",
   "version": "1.0.0",
-  "description": "OAuth-secured remote MCP server for managing QuickNode blockchain infrastructure — endpoints, rate limits, security, metrics, billing.",
+  "description": "OAuth-secured remote MCP server for managing Quicknode blockchain infrastructure — endpoints, rate limits, security, metrics, billing.",
   "author": {
-    "name": "QuickNode",
+    "name": "Quicknode",
     "email": "support@quicknode.com"
   },
   "license": "MIT",

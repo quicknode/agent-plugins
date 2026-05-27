@@ -1,9 +1,9 @@
-# Add QuickNode Remote MCP to Cursor
+# Add Quicknode Remote MCP to Cursor
 
 One-click install via deeplink:
 
 <!-- BEGIN: generated-deeplink -->
-[![Add QuickNode Remote MCP to Cursor](https://img.shields.io/badge/Add_to_Cursor-black?style=for-the-badge&logo=cursor)](cursor://anysphere.cursor-deeplink/mcp/install?name=quicknode&config=eyJ1cmwiOiJodHRwczovL21jcC5xdWlja25vZGUuY29tL21jcCJ9)
+[![Add Quicknode Remote MCP to Cursor](https://img.shields.io/badge/Add_to_Cursor-black?style=for-the-badge&logo=cursor)](cursor://anysphere.cursor-deeplink/mcp/install?name=quicknode&config=eyJ1cmwiOiJodHRwczovL21jcC5xdWlja25vZGUuY29tL21jcCJ9)
 
 ```
 cursor://anysphere.cursor-deeplink/mcp/install?name=quicknode&config=eyJ1cmwiOiJodHRwczovL21jcC5xdWlja25vZGUuY29tL21jcCJ9
@@ -26,11 +26,11 @@ Edit `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project) and add:
 }
 ```
 
-No `auth` block needed — the QuickNode MCP server uses OAuth 2.1 with **Dynamic Client Registration** (RFC 7591). Cursor will register itself automatically against `https://mcp.quicknode.com/register` and walk you through OAuth in your browser on first connect.
+No `auth` block needed — the Quicknode MCP server uses OAuth 2.1 with **Dynamic Client Registration** (RFC 7591). Cursor will register itself automatically against `https://mcp.quicknode.com/register` and walk you through OAuth in your browser on first connect.
 
 ## What you get
 
-Tools for managing QuickNode endpoints, rate limits, security rules, metrics, billing, RPC usage, and supported chains — all through natural language. See the [plugin README](../../plugins/remote-mcp/README.md) for the full tool list.
+Tools for managing Quicknode endpoints, rate limits, security rules, metrics, billing, RPC usage, and supported chains — all through natural language. See the [plugin README](../../plugins/remote-mcp/README.md) for the full tool list.
 
 ## Troubleshooting
 
@@ -40,4 +40,4 @@ Tools for managing QuickNode endpoints, rate limits, security rules, metrics, bi
 
 ## Requirements
 
-A QuickNode account — sign up at [quicknode.com](https://www.quicknode.com).
+A Quicknode account — sign up at [quicknode.com](https://www.quicknode.com).
