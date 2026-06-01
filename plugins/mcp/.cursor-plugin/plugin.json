@@ -2,7 +2,7 @@
   "name": "mcp",
   "displayName": "Quicknode MCP",
   "version": "1.0.0",
-  "description": "OAuth-secured remote MCP server for managing Quicknode blockchain infrastructure — endpoints, rate limits, security, metrics, billing.",
+  "description": "Manage your blockchain infrastructure across 80+ chains with your agents.",
   "author": {
     "name": "Quicknode",
     "email": "support@quicknode.com"

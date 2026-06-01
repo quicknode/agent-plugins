@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Generates per-client install deeplinks from the plugin's mcp.json and
 // rewrites them into docs/install/*.md between sentinel markers.
-// Idempotent — safe to re-run.
+// Idempotent. Safe to re-run.
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";

@@ -21,7 +21,7 @@ In Zed's settings (Command Palette → "zed: open settings"), add to `context_se
 
 `mcp-remote` handles the OAuth + DCR handshake locally and proxies it over stdio into Zed.
 
-## Native remote (try first if you want — may not work yet)
+## Native remote
 
 ```json
 {
@@ -39,10 +39,10 @@ Note: Zed uses `context_servers` (not `mcpServers`).
 
 ## What you get
 
-Tools for managing Quicknode endpoints, rate limits, security rules, metrics, billing, RPC usage, and supported chains. See the [plugin README](../../plugins/mcp/README.md) for the full tool list.
+Manage your blockchain infrastructure from your AI assistant: endpoints, rate limits, security, metrics, logs, and billing. See the [plugin README](../../plugins/mcp/README.md) for capabilities.
 
 ## Requirements
 
 - Zed with the AI assistant enabled.
-- Node.js installed (for `npx` to fetch `mcp-remote`) — only needed for the stdio bridge.
-- A Quicknode account — sign up at [quicknode.com](https://www.quicknode.com).
+- Node.js installed (for `npx` to fetch `mcp-remote`), only needed for the stdio bridge.
+- A Quicknode account. Sign up at [quicknode.com](https://www.quicknode.com).

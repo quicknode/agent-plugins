@@ -1,10 +1,10 @@
 # Quicknode MCP
 
-OAuth-secured remote MCP server for managing your Quicknode blockchain infrastructure from any MCP-compatible AI assistant.
+Give your AI agents the best blockchain infrastructure.
 
 - **Endpoint**: `https://mcp.quicknode.com/mcp`
 - **Transport**: Streamable HTTP (stateless)
-- **Auth**: OAuth 2.1 with Dynamic Client Registration (RFC 7591) — clients register themselves automatically; no API key in your config
+- **Auth**: OAuth 2.1 with Dynamic Client Registration (RFC 7591). Clients register themselves automatically; no API key in your config.
 
 ## Install
 
@@ -30,28 +30,15 @@ Manual config (works for any client supporting remote MCP):
 
 On first connection, the client performs DCR against `https://mcp.quicknode.com/register`, then walks you through OAuth in your browser. No pre-shared `CLIENT_ID` / `CLIENT_SECRET` needed.
 
-## Available tools
+## What you can do
 
-| Tool | Purpose |
-|---|---|
-| `list-endpoints` | List your Quicknode endpoints |
-| `get-endpoint` | Get details for one endpoint |
-| `create-endpoint` | Provision a new endpoint |
-| `delete-endpoint` | Decommission an endpoint |
-| `update-endpoint-security-options` | Update endpoint security configuration |
-| `update-endpoint-rate-limits` | Adjust per-method rate limits |
-| `get-endpoint-rate-limit-by-method` | Inspect a single method's rate limit |
-| `get-rate-limit-details` | Get rate-limit configuration details |
-| `list-endpoint-method-rate-limits` | List all method-level limits for an endpoint |
-| `create-security-rule` | Add a security rule |
-| `delete-security-rule` | Remove a security rule |
-| `list-endpoint-security` | List active security rules |
-| `get-endpoint-metrics` | Fetch endpoint metrics |
-| `list-endpoint-logs` | List endpoint request logs |
-| `get-endpoint-log-details` | Inspect one log entry |
-| `get-rpc-usage` | RPC usage stats |
-| `get-billing` | Account billing summary |
-| `list-chains` | List supported chains |
+- **Endpoint management**: list, inspect, provision, and archive Quicknode endpoints across supported chains.
+- **Rate limits**: adjust general (RPS/RPM/RPD) limits and configure per-method rate limiters.
+- **Security**: manage endpoint security options (CORS, JWT, IPs, etc.) and rules (IP, JWT, referrer, domain mask, token).
+- **Observability**: fetch endpoint metrics, request/response logs, and account-level RPC usage breakdowns.
+- **Account**: query billing and discover supported chains.
+
+Once connected, your MCP client will display the live tool list from the server.
 
 ## Requirements
 
@@ -59,4 +46,4 @@ A Quicknode account. Sign up at [quicknode.com](https://www.quicknode.com).
 
 ## License
 
-MIT — see [LICENSE.md](../../LICENSE.md) at the repo root.
+MIT. See [LICENSE.md](../../LICENSE.md) at the repo root.

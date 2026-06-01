@@ -37,10 +37,10 @@ On first connection, VS Code performs OAuth 2.1 + Dynamic Client Registration ag
 
 ## What you get
 
-Tools for managing Quicknode endpoints, rate limits, security rules, metrics, billing, RPC usage, and supported chains. See the [plugin README](../../plugins/mcp/README.md) for the full tool list.
+Manage your blockchain infrastructure from your AI assistant: endpoints, rate limits, security, metrics, logs, and billing. See the [plugin README](../../plugins/mcp/README.md) for capabilities.
 
 ## Requirements
 
 - VS Code 1.99+ (native MCP support).
 - GitHub Copilot or another MCP-aware AI assistant inside VS Code.
-- A Quicknode account — sign up at [quicknode.com](https://www.quicknode.com).
+- A Quicknode account. Sign up at [quicknode.com](https://www.quicknode.com).

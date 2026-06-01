@@ -14,7 +14,7 @@ Edit `~/.codeium/windsurf/mcp_config.json` and add:
 }
 ```
 
-Note: Windsurf uses `serverUrl` (not `url`). Then **fully quit and reopen Windsurf** — closing the window alone doesn't reload MCP servers.
+Note: Windsurf uses `serverUrl` (not `url`). Then **fully quit and reopen Windsurf**. Closing the window alone doesn't reload MCP servers.
 
 On first connection, Windsurf performs OAuth 2.1 + Dynamic Client Registration against `https://mcp.quicknode.com/register` and prompts you to authorize in the browser. No pre-shared credentials needed.
 
@@ -32,8 +32,8 @@ windsurf://windsurf-mcp-registry?serverName=quicknode-mcp
 
 ## What you get
 
-Tools for managing Quicknode endpoints, rate limits, security rules, metrics, billing, RPC usage, and supported chains. See the [plugin README](../../plugins/mcp/README.md) for the full tool list.
+Manage your blockchain infrastructure from your AI assistant: endpoints, rate limits, security, metrics, logs, and billing. See the [plugin README](../../plugins/mcp/README.md) for capabilities.
 
 ## Requirements
 
-A Quicknode account — sign up at [quicknode.com](https://www.quicknode.com). MCP access must be enabled by your Windsurf team admin.
+A Quicknode account. Sign up at [quicknode.com](https://www.quicknode.com). MCP access must be enabled by your Windsurf team admin.

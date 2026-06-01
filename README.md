@@ -1,24 +1,24 @@
 # Quicknode Agent Plugins
 
-Distribution surface for Quicknode's AI agent plugins — MCP servers, skills, prompts, and rules — across IDE marketplaces.
+Agent plugins from Quicknode. MCP servers, skills, and more.
 
 ## Available plugins
 
-| Plugin | Description |
-|---|---|
-| [`mcp`](./plugins/mcp/) | OAuth-secured remote MCP server for managing Quicknode infrastructure — endpoints, rate limits, security, metrics, billing. |
+| Plugin                  | Description                                                                                                                 |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| [`mcp`](./plugins/mcp/) | Manage your blockchain infrastructure across 80+ chains with your agents. |
 
 ## Install
 
-| Client | Guide |
-|---|---|
-| Cursor | [docs/install/cursor.md](./docs/install/cursor.md) |
+| Client   | Guide                                                  |
+| -------- | ------------------------------------------------------ |
+| Cursor   | [docs/install/cursor.md](./docs/install/cursor.md)     |
 | Windsurf | [docs/install/windsurf.md](./docs/install/windsurf.md) |
-| VS Code | [docs/install/vscode.md](./docs/install/vscode.md) |
-| Zed | [docs/install/zed.md](./docs/install/zed.md) |
+| VS Code  | [docs/install/vscode.md](./docs/install/vscode.md)     |
+| Zed      | [docs/install/zed.md](./docs/install/zed.md)           |
 
 For Claude Code and ChatGPT, use the existing listings on the respective marketplaces.
 
 ## License
 
-MIT — see [LICENSE.md](./LICENSE.md).
+MIT. See [LICENSE.md](./LICENSE.md).
