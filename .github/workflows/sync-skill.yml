@@ -1,0 +1,58 @@
+name: Sync quicknode-skill
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'  # Every Monday 09:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run sync script
+        id: sync
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e
+          bash scripts/sync-skill.sh
+          EXIT=$?
+          set -e
+          if [ $EXIT -eq 1 ]; then
+            echo "drift=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "drift=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Read upstream SHA
+        id: meta
+        if: steps.sync.outputs.drift == 'true'
+        run: |
+          SHA=$(grep "Upstream commit:" plugins/quicknode/skills/quicknode-skill/SKILL_SOURCE.md | awk '{print $NF}')
+          echo "sha=${SHA}" >> "$GITHUB_OUTPUT"
+
+      - name: Open PR on drift
+        if: steps.sync.outputs.drift == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: sync/quicknode-skill-${{ steps.meta.outputs.sha }}
+          delete-branch: true
+          commit-message: "sync: update quicknode-skill from blockchain-skills@${{ steps.meta.outputs.sha }}"
+          title: "Sync quicknode-skill from blockchain-skills@${{ steps.meta.outputs.sha }}"
+          body: |
+            Automated sync of `plugins/quicknode/skills/quicknode-skill/` from upstream [`quiknode-labs/blockchain-skills`](https://github.com/quiknode-labs/blockchain-skills).
+
+            **Upstream commit:** `${{ steps.meta.outputs.sha }}`
+
+            Review the diff to confirm no breaking changes before merging.
+          labels: "sync,automated"
+          reviewers: "0xsergen"

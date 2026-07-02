@@ -11,9 +11,9 @@
   },
   "plugins": [
     {
-      "name": "mcp",
-      "description": "Manage your blockchain infrastructure across 80+ chains with your agents.",
-      "source": "./plugins/mcp",
+      "name": "quicknode",
+      "description": "Build on Quicknode blockchain infrastructure: manage endpoints across 80+ chains (MCP), plus commands, a subagent, and a skill for RPC, Solana, Hyperliquid, x402, MPP, and more.",
+      "source": "./plugins/quicknode",
       "strict": false
     }
   ]

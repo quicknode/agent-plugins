@@ -37,7 +37,7 @@ On first connection, VS Code performs OAuth 2.1 + Dynamic Client Registration ag
 
 ## What you get
 
-Manage your blockchain infrastructure from your AI assistant: endpoints, rate limits, security, metrics, logs, and billing. See the [plugin README](../../plugins/mcp/README.md) for capabilities.
+Manage your blockchain infrastructure from your AI assistant: endpoints, rate limits, security, metrics, logs, and billing. See the [plugin README](../../plugins/quicknode/README.md) for capabilities.
 
 ## Requirements
 

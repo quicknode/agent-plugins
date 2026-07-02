@@ -4,9 +4,9 @@ Agent plugins from Quicknode. MCP servers, skills, and more.
 
 ## Available plugins
 
-| Plugin                  | Description                                                                                                                 |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| [`mcp`](./plugins/mcp/) | Manage your blockchain infrastructure across 80+ chains with your agents. |
+| Plugin                              | Description                                                                                                                                                     |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`quicknode`](./plugins/quicknode/) | Build on Quicknode blockchain infrastructure: manage endpoints across 80+ chains (MCP), plus commands, a subagent, and a skill for RPC, Solana, Hyperliquid, x402, MPP, and more. |
 
 ## Install
 
@@ -17,7 +17,13 @@ Agent plugins from Quicknode. MCP servers, skills, and more.
 | VS Code  | [docs/install/vscode.md](./docs/install/vscode.md)     |
 | Zed      | [docs/install/zed.md](./docs/install/zed.md)           |
 
-For Claude Code and ChatGPT, use the existing listings on the respective marketplaces.
+For Claude Code, add this marketplace and install the `quicknode` plugin:
+
+```
+/plugin marketplace add quicknode/agent-plugins
+```
+
+For ChatGPT, use the existing listing on its marketplace.
 
 ## License
 

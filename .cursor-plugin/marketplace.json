@@ -11,8 +11,8 @@
   },
   "plugins": [
     {
-      "name": "mcp",
-      "source": "./plugins/mcp",
+      "name": "quicknode",
+      "source": "./plugins/quicknode",
       "description": "Manage your blockchain infrastructure across 80+ chains with your agents."
     }
   ]
