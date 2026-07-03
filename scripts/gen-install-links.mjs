@@ -15,11 +15,11 @@ const PLUGIN_DISPLAY = "Quicknode MCP";
 const WINDSURF_REGISTRY_NAME = "quicknode-mcp";
 
 const mcpJson = JSON.parse(
-  readFileSync(resolve(repoRoot, "plugins/quicknode/mcp.json"), "utf8")
+  readFileSync(resolve(repoRoot, "plugins/quicknode/.mcp.json"), "utf8")
 );
 const serverConfig = mcpJson.mcpServers[PLUGIN_NAME];
 if (!serverConfig) {
-  throw new Error(`No server named "${PLUGIN_NAME}" in plugins/quicknode/mcp.json`);
+  throw new Error(`No server named "${PLUGIN_NAME}" in plugins/quicknode/.mcp.json`);
 }
 
 // --- Cursor deeplink (encodes the full config in base64) ---
