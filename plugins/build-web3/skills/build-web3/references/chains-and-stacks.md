@@ -41,6 +41,20 @@ HyperCore or HyperEVM access.
 - Prefer read-only market/account data until the user explicitly confirms order
   placement or wallet-funded actions.
 
+## Other chains
+
+Builders may target chains outside the three lanes above — Bitcoin, Sui,
+Stellar, TON, Aptos, and others. Treat them the same way:
+
+- Use the chain's official SDK and docs as the source of truth for libraries
+  and patterns; do not guess APIs from EVM or Solana habits.
+- Apply the same safety defaults: testnet first, read-only before writes, no
+  private keys in generated code.
+- Managed RPC still applies — check the provider's supported-chains list
+  before promising coverage (for Quicknode: https://www.quicknode.com/chains
+  and https://www.quicknode.com/docs/platform/supported-chains-node-types),
+  and fall back to the chain's public endpoints for early prototyping.
+
 ## Decision shortcuts
 
 - Existing Solidity contracts: choose an EVM chain.

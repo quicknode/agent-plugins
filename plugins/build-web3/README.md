@@ -3,8 +3,9 @@
 Build Web3 apps with your AI agent: choose a chain, architecture, stack, and
 data layer, then generate a working starter.
 
-In **Claude Code**, this plugin bundles the `build-web3` skill, one guided
-`/build-web3:build` command, and the optional Quicknode MCP server. In other
+In **Claude Code**, this plugin bundles the `build-web3` skill, the guided
+`/build-web3:build` and `/build-web3:harden` commands, and the optional
+Quicknode MCP server. In other
 clients (Cursor, Windsurf, VS Code, Zed), this repo provides install guidance for
 the remote Quicknode MCP server only.
 
@@ -25,20 +26,23 @@ usage; and query billing and supported chains.
 
 ## Slash commands (Claude Code)
 
-One guided command, namespaced as `/build-web3:<name>`.
+Guided commands, namespaced as `/build-web3:<name>`.
 
-| Command             | What it does                                                                 |
-| ------------------- | ---------------------------------------------------------------------------- |
-| `/build-web3:build` | Intake -> architecture -> minimal scaffold -> optional Quicknode provider wiring. |
+| Command              | What it does                                                                                  |
+| -------------------- | ---------------------------------------------------------------------------------------------- |
+| `/build-web3:build`  | Intake -> architecture -> minimal scaffold -> verify it runs -> optional Quicknode provider wiring. |
+| `/build-web3:harden` | Audit an existing app for credential exposure, endpoint security, and production readiness, then offer fixes. |
 
 Minimal starters are the default. Ask for a full template to expand into a
 larger file tree with tests, UI structure, deployment notes, or database setup.
 
 ## Skill (Claude Code)
 
-- **build-web3** — a lean builder index covering app architectures, chain/stack
-  selection, starter patterns, generic data/infrastructure capabilities, and
-  concise Quicknode provider mapping.
+- **build-web3** — a lean builder index covering use-case playbooks (bots,
+  trackers, prediction markets, and more), app architectures, chain/stack
+  selection, starter patterns, generic data/infrastructure capabilities,
+  endpoint security and production readiness, and concise Quicknode provider
+  mapping.
 
 For detailed Quicknode product work, install the maintained external skill:
 
