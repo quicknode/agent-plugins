@@ -1,0 +1,12 @@
+{
+  "name": "build-web3",
+  "description": "Build Web3 apps with your AI agent: choose a chain, architecture, stack, and data layer, then generate a working starter. Includes optional Quicknode infrastructure integration for managed RPC, data, streams, analytics, payments, and endpoint management.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Quicknode",
+    "url": "https://www.quicknode.com"
+  },
+  "homepage": "https://www.quicknode.com/docs/build-with-ai",
+  "repository": "https://github.com/quicknode/agent-plugins",
+  "license": "MIT"
+}

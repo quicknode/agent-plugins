@@ -6,7 +6,7 @@ Agent plugins from Quicknode. MCP servers, skills, and more.
 
 | Plugin                              | Description                                                                                                                                                     |
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`quicknode`](./plugins/quicknode/) | Build on Quicknode blockchain infrastructure: manage endpoints across 80+ chains (MCP), plus commands, a subagent, and a skill for RPC, Solana, Hyperliquid, x402, MPP, and more. |
+| [`build-web3`](./plugins/build-web3/) | Build Web3 apps with your AI agent: choose a chain, architecture, stack, and data layer, then generate a working starter. Includes optional Quicknode infrastructure integration. |
 
 ## Install
 
@@ -17,7 +17,7 @@ Agent plugins from Quicknode. MCP servers, skills, and more.
 | VS Code  | [docs/install/vscode.md](./docs/install/vscode.md)     |
 | Zed      | [docs/install/zed.md](./docs/install/zed.md)           |
 
-For Claude Code, add this marketplace and install the `quicknode` plugin:
+For Claude Code, add this marketplace and install the `build-web3` plugin:
 
 ```
 /plugin marketplace add quicknode/agent-plugins

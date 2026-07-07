@@ -5,15 +5,15 @@
     "url": "https://www.quicknode.com"
   },
   "metadata": {
-    "description": "Build on the best blockchain infrastructure with your agents.",
+    "description": "Build Web3 apps with AI agents, with optional Quicknode infrastructure integration.",
     "version": "1.0.0",
     "repository": "https://github.com/quicknode/agent-plugins"
   },
   "plugins": [
     {
-      "name": "quicknode",
-      "description": "Build on Quicknode blockchain infrastructure: manage endpoints across 80+ chains (MCP), plus commands, a subagent, and a skill for RPC, Solana, Hyperliquid, x402, MPP, and more.",
-      "source": "./plugins/quicknode",
+      "name": "build-web3",
+      "description": "Build Web3 apps with your AI agent: choose a chain, architecture, stack, and data layer, then generate a working starter. Includes optional Quicknode infrastructure integration for managed RPC, data, streams, analytics, payments, and endpoint management.",
+      "source": "./plugins/build-web3",
       "strict": false
     }
   ]
