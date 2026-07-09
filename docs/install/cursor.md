@@ -31,10 +31,7 @@ No `auth` block needed. The Quicknode MCP server uses OAuth 2.1 with **Dynamic C
 
 ## What you get
 
-Manage Quicknode blockchain infrastructure from your AI assistant: endpoints,
-rate limits, security, metrics, logs, and billing. See the
-[plugin README](../../plugins/build-web3/README.md) for how MCP fits into the
-broader `build-web3` Claude Code plugin.
+Manage Quicknode blockchain infrastructure from your AI assistant: endpoints, rate limits, security, metrics, logs, and billing. See the [plugin README](../../plugins/build-web3/README.md) for how MCP fits into the broader `build-web3` Claude Code plugin.
 
 ## Troubleshooting
 
@@ -44,5 +41,4 @@ broader `build-web3` Claude Code plugin.
 
 ## Requirements
 
-A Quicknode account is required for MCP provider-management actions. Sign up at
-[quicknode.com](https://www.quicknode.com).
+A Quicknode account is required for MCP provider-management actions. Sign up at [quicknode.com](https://www.quicknode.com).

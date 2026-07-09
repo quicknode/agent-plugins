@@ -1,12 +1,12 @@
 # Quicknode Agent Plugins
 
-Agent plugins from Quicknode. MCP servers, skills, and more.
+Agent plugins from Quicknode for building Web3 apps with AI agents.
 
 ## Available plugins
 
 | Plugin                              | Description                                                                                                                                                     |
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`build-web3`](./plugins/build-web3/) | Build Web3 apps with your AI agent: choose a chain, architecture, stack, and data layer, then generate a working starter. Includes optional Quicknode infrastructure integration. |
+| [`build-web3`](./plugins/build-web3/) | Build Web3 apps with your AI agent: choose a chain, architecture, stack, data layer, and production posture. Powered by optional Quicknode infrastructure integration. |
 
 ## Install
 
@@ -27,12 +27,10 @@ For ChatGPT, use the existing listing on its marketplace.
 
 ## Content rules
 
-Plugin skills and references in this repo must stay maintenance-free:
+Plugin skills and references in this repo should stay stable and useful:
 
-- No perishable facts — no plan tiers, pricing, rate-limit numbers, or RPC
-  method tables. Link to the live docs (https://www.quicknode.com/docs/) or
-  the external `quicknode-skill` instead.
-- Stable concepts, capability names, and decision guidance only.
+- No perishable facts — no plan tiers, pricing, rate-limit numbers, or RPC method tables. Link to the live docs (https://www.quicknode.com/docs/) for those details.
+- Stable concepts, product categories, capability names, and decision guidance belong in this repo so the plugin is self-contained.
 
 ## License
 

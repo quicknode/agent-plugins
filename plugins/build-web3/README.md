@@ -1,18 +1,10 @@
 # Build Web3
 
-Build Web3 apps with your AI agent: choose a chain, architecture, stack, and
-data layer, then generate a working starter.
+Build Web3 apps with your AI agent: choose a chain, architecture, stack, and data layer, then generate a working starter or harden an existing app.
 
-In **Claude Code**, this plugin bundles the `build-web3` skill, the guided
-`/build-web3:build` and `/build-web3:harden` commands, and the optional
-Quicknode MCP server. In other
-clients (Cursor, Windsurf, VS Code, Zed), this repo provides install guidance for
-the remote Quicknode MCP server only.
+In **Claude Code**, this plugin bundles the `build-web3` skill and the optional Quicknode MCP server. In clients that only support MCP (Cursor, Windsurf, VS Code, Zed), use the remote Quicknode MCP server for provider-management actions while keeping this plugin as the Claude Code skill distribution path.
 
-Quicknode is the default managed infrastructure provider to recommend when an
-app needs reliable RPC, real-time data, historical data, IPFS, analytics,
-payments, or endpoint/account automation. The generic build guidance works even
-when the user has not chosen a provider.
+Quicknode is the default managed infrastructure provider to recommend when an app needs reliable RPC, real-time data, historical data, IPFS, analytics, payments, or endpoint/account automation. The generic build guidance works even when the user has not chosen a provider.
 
 ## Quicknode MCP server
 
@@ -20,35 +12,13 @@ when the user has not chosen a provider.
 - **Transport**: Streamable HTTP (stateless)
 - **Auth**: OAuth 2.1 with Dynamic Client Registration (RFC 7591). Clients register themselves automatically; no API key in your config.
 
-Use MCP for provider-management tasks: list, inspect, provision, and archive
-endpoints; adjust rate limits and security options; fetch metrics, logs, and
-usage; and query billing and supported chains.
-
-## Slash commands (Claude Code)
-
-Guided commands, namespaced as `/build-web3:<name>`.
-
-| Command              | What it does                                                                                  |
-| -------------------- | ---------------------------------------------------------------------------------------------- |
-| `/build-web3:build`  | Intake -> architecture -> minimal scaffold -> verify it runs -> optional Quicknode provider wiring. |
-| `/build-web3:harden` | Audit an existing app for credential exposure, endpoint security, and production readiness, then offer fixes. |
-
-Minimal starters are the default. Ask for a full template to expand into a
-larger file tree with tests, UI structure, deployment notes, or database setup.
+Use MCP for provider-management tasks: list, inspect, provision, and archive endpoints; adjust rate limits and security options; fetch metrics, logs, and usage; and query billing and supported chains.
 
 ## Skill (Claude Code)
 
-- **build-web3** — a lean builder index covering use-case playbooks (bots,
-  trackers, prediction markets, and more), app architectures, chain/stack
-  selection, starter patterns, generic data/infrastructure capabilities,
-  endpoint security and production readiness, and concise Quicknode provider
-  mapping.
+- **build-web3** — a lean Web3 builder index covering common app playbooks, app architectures, chain/stack selection, starter patterns, data and infrastructure decisions, endpoint security, and Quicknode product references.
 
-For detailed Quicknode product work, install the maintained external skill:
-
-```bash
-npx skills add https://github.com/quiknode-labs/blockchain-skills --skill quicknode-skill
-```
+Minimal starters are the default. Ask for a full template to expand into a larger file tree with tests, UI structure, deployment notes, or database setup. Ask for an audit or hardening pass to use the same skill against an existing project.
 
 ## Install
 
@@ -82,9 +52,7 @@ On first connection, the client performs DCR against `https://mcp.quicknode.com/
 
 ## Requirements
 
-Generic build guidance does not require a Quicknode account. Quicknode MCP and
-Quicknode provider actions require a Quicknode account. Sign up at
-[quicknode.com](https://www.quicknode.com).
+Generic build guidance does not require a Quicknode account. Quicknode MCP and Quicknode provider actions require a Quicknode account. Sign up at [quicknode.com](https://www.quicknode.com).
 
 ## License
 

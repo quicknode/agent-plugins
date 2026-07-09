@@ -1,7 +1,6 @@
 # Starter Patterns
 
-Default to minimal starters. A minimal starter has one working entry point,
-environment placeholders, and the core logic for the requested use case.
+Default to minimal starters. A minimal starter has one working entry point, environment placeholders, and the core logic for the requested use case.
 
 ## Generic conventions
 
@@ -9,8 +8,7 @@ environment placeholders, and the core logic for the requested use case.
 - Use `WS_RPC_URL` only when the starter needs WebSocket subscriptions.
 - Add `.env.example`; never include real secrets.
 - Keep generated code focused on the requested workflow.
-- Offer a full template only when the user asks for UI polish, tests, deployment,
-  authentication, database setup, or multiple pages/services.
+- Offer a full template only when the user asks for UI polish, tests, deployment, authentication, database setup, or multiple pages/services.
 
 ## EVM TypeScript script
 
@@ -41,8 +39,7 @@ npx create-next-app@latest my-app --ts
 npm install viem wagmi @tanstack/react-query
 ```
 
-Server-side reads can use `viem` with `RPC_URL`. Wallet signing should happen
-client-side through wallet connectors.
+Server-side reads can use `viem` with `RPC_URL`. Wallet signing should happen client-side through wallet connectors.
 
 ## Solana TypeScript script
 

@@ -5,14 +5,14 @@
     "url": "https://www.quicknode.com"
   },
   "metadata": {
-    "description": "Build Web3 apps with AI agents, with optional Quicknode infrastructure integration.",
+    "description": "Build and harden Web3 apps with AI agents, powered by optional Quicknode infrastructure integration.",
     "version": "1.0.0",
     "repository": "https://github.com/quicknode/agent-plugins"
   },
   "plugins": [
     {
       "name": "build-web3",
-      "description": "Build Web3 apps with your AI agent: choose a chain, architecture, stack, and data layer, then generate a working starter. Includes optional Quicknode infrastructure integration for managed RPC, data, streams, analytics, payments, and endpoint management.",
+      "description": "Build and harden Web3 apps with your AI agent: choose a chain, architecture, stack, data layer, and production posture. Includes optional Quicknode infrastructure integration for managed RPC, streams, analytics, payments, and endpoint management.",
       "source": "./plugins/build-web3",
       "strict": false
     }
