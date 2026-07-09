@@ -41,6 +41,37 @@ Build Web3 apps from an idea to a working minimal starter. Stay provider-neutral
 | Use paid/keyless agent access or provider automation | [references/agent-access-and-automation.md](references/agent-access-and-automation.md) |
 | Use Quicknode Marketplace add-ons | [references/marketplace-addons.md](references/marketplace-addons.md) |
 
+### Quicknode Deep References
+
+These live under `references/quicknode/` — full method tables, setup code, schemas, and API
+details for each Quicknode product. Route here from the routers above once Quicknode is the
+chosen provider; the router files stay the entry point so this table is not the first thing
+loaded.
+
+| Category | Product | Reference |
+|----------|---------|-----------|
+| Infrastructure | Core RPC API | [rpc-reference.md](references/quicknode/rpc-reference.md) |
+| Infrastructure | IPFS | [ipfs-reference.md](references/quicknode/ipfs-reference.md) |
+| Real-Time Data | Streams | [streams-reference.md](references/quicknode/streams-reference.md) |
+| Real-Time Data | Streams Backfills | [streams-backfills-reference.md](references/quicknode/streams-backfills-reference.md) |
+| Real-Time Data | Webhooks | [webhooks-reference.md](references/quicknode/webhooks-reference.md) |
+| Real-Time Data | Solana gRPC | [solana-grpc-reference.md](references/quicknode/solana-grpc-reference.md) |
+| Real-Time Data | HyperCore gRPC / Hyperliquid | [hypercore-hyperliquid-reference.md](references/quicknode/hypercore-hyperliquid-reference.md) |
+| Indexed Data | SQL Explorer | [sql-explorer.md](references/quicknode/sql-explorer.md) |
+| Indexed Data | Agent Identity (ERC-8004) | [agent-identity-reference.md](references/quicknode/agent-identity-reference.md) |
+| Indexed Data | Blockbook | [blockbook-reference.md](references/quicknode/blockbook-reference.md) |
+| Indexed Data | Metaplex DAS API | [metaplex-das-reference.md](references/quicknode/metaplex-das-reference.md) |
+| Indexed Data | Ordinals & Runes API | [ordinals-runes-reference.md](references/quicknode/ordinals-runes-reference.md) |
+| Trading & DeFi | Swap API | [swap-api-reference.md](references/quicknode/swap-api-reference.md) |
+| Platform | Admin API | [admin-api-reference.md](references/quicknode/admin-api-reference.md) |
+| Platform | Key-Value Store | [kv-reference.md](references/quicknode/kv-reference.md) |
+| Platform | Quicknode SDK | [sdk-reference.md](references/quicknode/sdk-reference.md) |
+| Agent Surface | x402 | [x402-reference.md](references/quicknode/x402-reference.md) |
+| Agent Surface | MPP | [mpp-reference.md](references/quicknode/mpp-reference.md) |
+| Agent Surface | Agent Subscriptions | [agent-subscriptions-reference.md](references/quicknode/agent-subscriptions-reference.md) |
+| Agent Surface | Quicknode CLI | [cli-reference.md](references/quicknode/cli-reference.md) |
+| Agent Surface | Quicknode MCP | [mcp-reference.md](references/quicknode/mcp-reference.md) |
+
 ## Builder Flow
 
 1. Clarify only the missing high-impact inputs: app goal, chain/network, stack, and write vs read-only behavior. Match the goal against [use-case-playbooks.md](references/use-case-playbooks.md) first.
