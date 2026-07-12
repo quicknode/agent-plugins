@@ -1,6 +1,6 @@
 {
   "name": "build-web3",
-  "description": "Build and harden Web3 apps with your AI agent: choose a chain, architecture, stack, data layer, and production posture. Includes optional Quicknode infrastructure integration for managed RPC, streams, analytics, payments, and endpoint management.",
+  "description": "Build and improve Web3 apps with your AI agent, with optional Quicknode infrastructure for RPC access, live onchain events, historical data, and wallet-paid API access.",
   "version": "1.0.0",
   "author": {
     "name": "Quicknode",

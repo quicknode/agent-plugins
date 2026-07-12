@@ -1,7 +1,7 @@
 {
   "name": "build-web3",
   "version": "1.0.0",
-  "description": "Build and harden Web3 apps with architecture guidance and optional Quicknode infrastructure management.",
+  "description": "Build and improve Web3 apps with architecture guidance and optional Quicknode infrastructure management.",
   "author": {
     "name": "Quicknode",
     "url": "https://www.quicknode.com"
@@ -14,7 +14,7 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Build Web3",
-    "shortDescription": "Build and harden Web3 apps.",
+    "shortDescription": "Build and improve Web3 apps.",
     "longDescription": "Choose a chain, architecture, stack, data layer, and production posture for a Web3 app. Includes optional Quicknode MCP tools for infrastructure management.",
     "developerName": "Quicknode",
     "category": "Developer Tools",
