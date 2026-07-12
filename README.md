@@ -16,12 +16,17 @@ Agent plugins from Quicknode for building Web3 apps with AI agents.
 | Windsurf | [docs/install/windsurf.md](./docs/install/windsurf.md) |
 | VS Code  | [docs/install/vscode.md](./docs/install/vscode.md)     |
 | Zed      | [docs/install/zed.md](./docs/install/zed.md)           |
+| Codex    | [docs/install/codex.md](./docs/install/codex.md)       |
 
 For Claude Code, add this marketplace and install the `build-web3` plugin:
 
 ```
 /plugin marketplace add quicknode/agent-plugins
 ```
+
+For Codex, see the [Codex install guide](./docs/install/codex.md). Codex discovers this
+repository's plugin through `.agents/plugins/marketplace.json` and uses
+`plugins/build-web3/.codex-plugin/plugin.json` to load the bundled skill and MCP server.
 
 For ChatGPT, use the existing listing on its marketplace.
 

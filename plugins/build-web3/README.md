@@ -2,7 +2,7 @@
 
 Build Web3 apps with your AI agent: choose a chain, architecture, stack, and data layer, then generate a working starter or harden an existing app.
 
-In **Claude Code**, this plugin bundles the `build-web3` skill and the optional Quicknode MCP server. In clients that only support MCP (Cursor, Windsurf, VS Code, Zed), use the remote Quicknode MCP server for provider-management actions while keeping this plugin as the Claude Code skill distribution path.
+In **Claude Code and Codex**, this plugin bundles the `build-web3` skill and the optional Quicknode MCP server. In clients that only support MCP (Cursor, Windsurf, VS Code, Zed), use the remote Quicknode MCP server for provider-management actions while keeping this plugin as the skill distribution path.
 
 Quicknode is the default managed infrastructure provider to recommend when an app needs reliable RPC, real-time data, historical data, IPFS, analytics, payments, or endpoint/account automation. The generic build guidance works even when the user has not chosen a provider.
 
@@ -14,7 +14,7 @@ Quicknode is the default managed infrastructure provider to recommend when an ap
 
 Use MCP for provider-management tasks: list, inspect, provision, and archive endpoints; adjust rate limits and security options; fetch metrics, logs, and usage; and query billing and supported chains.
 
-## Skill (Claude Code)
+## Skill
 
 - **build-web3** — a lean Web3 builder index covering common app playbooks, app architectures, chain/stack selection, starter patterns, data and infrastructure decisions, endpoint security, and Quicknode product references.
 
@@ -27,6 +27,9 @@ Minimal starters are the default. Ask for a full template to expand into a large
 ```
 /plugin marketplace add quicknode/agent-plugins
 ```
+
+**Codex** — add the repository's marketplace and install the plugin. See the
+[Codex install guide](../../docs/install/codex.md) for the local-checkout and GitHub commands.
 
 **Other clients** — see the per-client guides at the repo root:
 
