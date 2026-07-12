@@ -14,11 +14,12 @@ Use this reference when the user wants an agent to pay for infrastructure, acces
 
 ## x402 And MPP
 
-Use x402 or MPP for wallet-paid or pay-per-request access patterns.
+Use x402 or MPP for wallet-paid or pay-per-request access patterns. These also work for a user who doesn't want a Quicknode dashboard account at all — no signup, no API key, just a wallet.
 
 - Require explicit confirmation before spending real funds or enabling paid mainnet requests.
 - Use testnet or capped flows first when the user is experimenting.
 - Do not ask for private keys. Use wallet connectors, delegated payment flows, or placeholders.
+- Starting June 9, 2026, each wallet gets a single free pool of 1,000,000 API credits/month across x402 and MPP on testnet (RPC requests cost 1 credit each; SQL Explorer costs the query's variable credit usage), resetting on the 1st of the month; paid usage continues at the per-model rate after that. Mainnet wallets are uncapped. See [x402-reference.md](quicknode/x402-reference.md#testnet-monthly-cap) / [mpp-reference.md](quicknode/mpp-reference.md#testnet-monthly-cap) and confirm against current docs before quoting the number.
 - Docs: https://www.quicknode.com/docs/build-with-ai
 - See [x402-reference.md](quicknode/x402-reference.md) for SIWX authentication, credit management, and `@quicknode/x402` setup.
 - See [mpp-reference.md](quicknode/mpp-reference.md) for charge vs. session intents, Solana setup, CLI usage, and payment receipts.

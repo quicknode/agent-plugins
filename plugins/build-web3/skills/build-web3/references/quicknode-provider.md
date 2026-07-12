@@ -38,7 +38,7 @@ QUICKNODE_WSS_URL=
 
 This plugin bundles the Quicknode MCP server for clients that support it. Use it for provider-management tasks such as listing, inspecting, provisioning, or archiving endpoints, checking usage, and working with account/platform context.
 
-Do not require the MCP server for normal Web3 scaffolding. A user without a Quicknode account should still get useful architecture and starter code.
+Do not require the MCP server for normal Web3 scaffolding. A user without a Quicknode account should still get useful architecture and starter code. If they don't want a dashboard account at all, x402 or MPP still let them use Quicknode's managed RPC/SQL Explorer keylessly, paying per request or session from a wallet — see [agent-access-and-automation.md](agent-access-and-automation.md#x402-and-mpp).
 
 ## Deep product detail
 

@@ -68,7 +68,7 @@ The payment network is independent of the chain you query. For example, you can 
 
 ## Testnet Monthly Cap
 
-Each wallet gets a **single pool of 1,000,000 API credits per month** across Quicknode's agentic payment surfaces, including x402 and MPP. The pool resets on the 1st of each month and covers both RPC and SQL Explorer calls. Mainnet wallets are uncapped.
+Each wallet gets a **single pool of 1,000,000 API credits per month** across Quicknode's agentic payment surfaces, including x402 and MPP. The pool resets on the 1st of each month and covers both RPC and SQL Explorer calls. RPC requests consume 1 API credit each; SQL Explorer consumes the variable number of credits the query uses. Mainnet wallets are uncapped.
 
 | Testnet Pool | Value |
 |-----------------|-------|

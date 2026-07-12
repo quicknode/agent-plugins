@@ -76,6 +76,8 @@ Use Streams when the app needs a push pipeline instead of polling RPC. Use Webho
 
 - Choose Streams for custom JavaScript filtering, transforms, high volume, multiple destinations, replay, or historical backfill. Streams can also be used for simple event notifications, but Webhooks are easier to set up and maintain for single-destination alerts.
 - Good Webhooks fit: wallet watchlists, transaction status alerts, balance movement alerts, and lightweight notifications.
+- Streams and Webhooks datasets are confirmed, post-block data only. For mempool/pending-transaction visibility (e.g. MEV-aware alerting), use Core RPC API's WebSocket subscriptions instead — see [rpc-reference.md](quicknode/rpc-reference.md#websocket-patterns).
+
 ### Solana gRPC And Blazar WSS
 
 Use Solana gRPC for low-latency Solana account, transaction, slot, and block streams. Use Blazar WSS for Quicknode-built Solana WebSocket subscriptions when the app needs fast block, account, transaction, or slot updates without a full gRPC integration. See [solana-grpc-reference.md](quicknode/solana-grpc-reference.md).

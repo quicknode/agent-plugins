@@ -17,6 +17,7 @@ Use when the app must react to transfers, contract events, account changes, orde
 - Simple webhook alert: one event shape, one destination.
 - Stream pipeline: filters, transforms, high volume, replay, historical catch-up from an earlier starting block, or multiple destinations.
 - Indexer: persistent queryable state in a database or warehouse.
+- Mempool/pending transactions (pre-confirmation, e.g. MEV-aware alerting): webhook/stream pipelines only carry confirmed data, so use the RPC provider's WebSocket subscriptions (`newPendingTransactions`, or Geth `txpool_*` methods where the chain/endpoint exposes them) instead. See [rpc-reference.md](quicknode/rpc-reference.md#websocket-patterns).
 
 ## Historical data and analytics
 
