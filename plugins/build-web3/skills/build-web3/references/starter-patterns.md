@@ -9,13 +9,7 @@ Default to minimal starters. A minimal starter has one working entry point, envi
 - Add `.env.example`; never include real secrets.
 - Keep generated code focused on the requested workflow.
 - Offer a full template only when the user asks for UI polish, tests, deployment, authentication, database setup, or multiple pages/services.
-- If the user has no RPC provider yet and does not want to sign up for one, default `RPC_URL` to Quicknode's public docs-demo endpoint so the starter still runs with zero signup — see "No-signup default" below. `RPC_URL` still overrides it once they have a provider (Quicknode or otherwise).
-
-## No-signup default: Quicknode docs-demo endpoints
-
-Every Quicknode RPC method doc page (`https://www.quicknode.com/docs/{chain}/{method}`) ships a live, keyless demo endpoint in its code examples, e.g. `https://docs-demo.quiknode.pro/` for Ethereum mainnet, `https://docs-demo.base-mainnet.quiknode.pro/` for Base, `https://docs-demo.solana-mainnet.quiknode.pro/` for Solana, `https://docs-demo.btc.quiknode.pro/` for Bitcoin. The subdomain pattern is not uniform across chains, so read the exact URL off that chain's method doc page rather than guessing it.
-
-These are shared, rate-limited endpoints meant for trying a method, not for production or sustained load. Use one only as a zero-config default for a minimal starter aimed at a user who explicitly doesn't want to sign up for any provider yet; say so in the generated code/comments, and point them to a real provider (Quicknode or otherwise) once they move past a quick test.
+- If the user has no RPC provider yet and does not want to sign up for one, offer Quicknode's x402 or MPP access: wallet-paid, keyless access with no dashboard account, including a free monthly credit pool — see [agent-access-and-automation.md](agent-access-and-automation.md#x402-and-mpp). That's a different client setup (the `mppx`/x402 SDK instead of a plain HTTP `RPC_URL`), so confirm the user wants that path before building the starter around it.
 
 ## EVM TypeScript script
 
@@ -75,10 +69,7 @@ pip install web3
 import os
 from web3 import Web3
 
-# No RPC_URL yet? Falls back to Quicknode's public docs-demo endpoint (rate-limited,
-# fine for a quick test — not for production). Set RPC_URL once you have a provider.
-rpc_url = os.environ.get("RPC_URL", "https://docs-demo.quiknode.pro/")
-w3 = Web3(Web3.HTTPProvider(rpc_url))
+w3 = Web3(Web3.HTTPProvider(os.environ["RPC_URL"]))
 print(w3.eth.block_number)
 ```
 
