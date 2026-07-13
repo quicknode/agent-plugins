@@ -1,0 +1,30 @@
+{
+  "name": "build-web3",
+  "version": "1.0.0",
+  "description": "Build and improve Web3 apps with architecture guidance and optional Quicknode infrastructure management.",
+  "author": {
+    "name": "Quicknode",
+    "url": "https://www.quicknode.com"
+  },
+  "homepage": "https://www.quicknode.com/docs/build-with-ai",
+  "repository": "https://github.com/quicknode/agent-plugins",
+  "license": "MIT",
+  "keywords": ["web3", "blockchain", "quicknode", "mcp"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Build Web3",
+    "shortDescription": "Build and improve Web3 apps.",
+    "longDescription": "Choose a chain, architecture, stack, data layer, and production posture for a Web3 app. Includes optional Quicknode MCP tools for infrastructure management.",
+    "developerName": "Quicknode",
+    "category": "Developer Tools",
+    "capabilities": ["Skills", "MCP"],
+    "websiteURL": "https://www.quicknode.com",
+    "defaultPrompt": [
+      "Help me plan a minimal Web3 app.",
+      "Help me harden my Web3 app for mainnet.",
+      "List my Quicknode endpoints."
+    ],
+    "brandColor": "#6CFF75"
+  }
+}

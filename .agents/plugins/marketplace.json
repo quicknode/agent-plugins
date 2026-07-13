@@ -1,0 +1,20 @@
+{
+  "name": "quicknode-agent-plugins",
+  "interface": {
+    "displayName": "Quicknode Agent Plugins"
+  },
+  "plugins": [
+    {
+      "name": "build-web3",
+      "source": {
+        "source": "local",
+        "path": "./plugins/build-web3"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

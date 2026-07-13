@@ -10,23 +10,26 @@ import { dirname, resolve } from "node:path";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, "..");
 
-const PLUGIN_NAME = "quicknode";
+// The plugin directory is "build-web3", but the MCP server identity (its key in
+// .mcp.json, and the deeplink name used for OAuth/DCR) stays "quicknode".
+const PLUGIN_DIR = "build-web3";
+const SERVER_NAME = "quicknode";
 const PLUGIN_DISPLAY = "Quicknode MCP";
 const WINDSURF_REGISTRY_NAME = "quicknode-mcp";
 
 const mcpJson = JSON.parse(
-  readFileSync(resolve(repoRoot, "plugins/mcp/mcp.json"), "utf8")
+  readFileSync(resolve(repoRoot, `plugins/${PLUGIN_DIR}/.mcp.json`), "utf8")
 );
-const serverConfig = mcpJson.mcpServers[PLUGIN_NAME];
+const serverConfig = mcpJson.mcpServers[SERVER_NAME];
 if (!serverConfig) {
-  throw new Error(`No server named "${PLUGIN_NAME}" in plugins/mcp/mcp.json`);
+  throw new Error(`No server named "${SERVER_NAME}" in plugins/${PLUGIN_DIR}/.mcp.json`);
 }
 
 // --- Cursor deeplink (encodes the full config in base64) ---
 // Format: cursor://anysphere.cursor-deeplink/mcp/install?name=NAME&config=BASE64
 const cursorConfigB64 = Buffer.from(JSON.stringify(serverConfig)).toString("base64");
 const cursorDeeplink = `cursor://anysphere.cursor-deeplink/mcp/install?name=${encodeURIComponent(
-  PLUGIN_NAME
+  SERVER_NAME
 )}&config=${cursorConfigB64}`;
 
 // --- Windsurf deeplink (references a server by name in Windsurf's own registry) ---

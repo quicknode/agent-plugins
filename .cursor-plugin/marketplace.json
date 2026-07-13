@@ -5,15 +5,15 @@
     "email": "support@quicknode.com"
   },
   "metadata": {
-    "description": "Build on the best blockchain infrastructure with your agents.",
+    "description": "Build and improve Web3 apps with AI agents, powered by optional Quicknode infrastructure integration.",
     "version": "1.0.0",
     "repository": "https://github.com/quicknode/agent-plugins"
   },
   "plugins": [
     {
-      "name": "mcp",
-      "source": "./plugins/mcp",
-      "description": "Manage your blockchain infrastructure across 80+ chains with your agents."
+      "name": "build-web3",
+      "source": "./plugins/build-web3",
+      "description": "Build and improve Web3 apps with your agents, with optional Quicknode MCP integration for managed blockchain infrastructure."
     }
   ]
 }

@@ -1,19 +1,19 @@
 {
-  "name": "agent-plugins",
+  "name": "quicknode-agent-plugins",
   "owner": {
     "name": "Quicknode",
     "url": "https://www.quicknode.com"
   },
   "metadata": {
-    "description": "Build on the best blockchain infrastructure with your agents.",
+    "description": "Build and improve Web3 apps with AI agents, powered by optional Quicknode infrastructure integration.",
     "version": "1.0.0",
     "repository": "https://github.com/quicknode/agent-plugins"
   },
   "plugins": [
     {
-      "name": "mcp",
-      "description": "Manage your blockchain infrastructure across 80+ chains with your agents.",
-      "source": "./plugins/mcp",
+      "name": "build-web3",
+      "description": "Build and improve Web3 apps with your AI agent, with optional Quicknode infrastructure for RPC access, live onchain events, historical data, and wallet-paid API access.",
+      "source": "./plugins/build-web3",
       "strict": false
     }
   ]

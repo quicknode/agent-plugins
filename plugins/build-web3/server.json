@@ -6,7 +6,7 @@
   "repository": {
     "url": "https://github.com/quicknode/agent-plugins",
     "source": "github",
-    "subfolder": "plugins/mcp"
+    "subfolder": "plugins/build-web3"
   },
   "remotes": [
     {

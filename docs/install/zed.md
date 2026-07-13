@@ -39,10 +39,10 @@ Note: Zed uses `context_servers` (not `mcpServers`).
 
 ## What you get
 
-Manage your blockchain infrastructure from your AI assistant: endpoints, rate limits, security, metrics, logs, and billing. See the [plugin README](../../plugins/mcp/README.md) for capabilities.
+Manage Quicknode blockchain infrastructure from your AI assistant: endpoints, rate limits, security, metrics, logs, and billing. See the [plugin README](../../plugins/build-web3/README.md) for how MCP fits into the broader `build-web3` Claude Code plugin.
 
 ## Requirements
 
 - Zed with the AI assistant enabled.
 - Node.js installed (for `npx` to fetch `mcp-remote`), only needed for the stdio bridge.
-- A Quicknode account. Sign up at [quicknode.com](https://www.quicknode.com).
+- A Quicknode account for MCP provider-management actions. Sign up at [quicknode.com](https://www.quicknode.com).

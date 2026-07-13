@@ -32,8 +32,8 @@ windsurf://windsurf-mcp-registry?serverName=quicknode-mcp
 
 ## What you get
 
-Manage your blockchain infrastructure from your AI assistant: endpoints, rate limits, security, metrics, logs, and billing. See the [plugin README](../../plugins/mcp/README.md) for capabilities.
+Manage Quicknode blockchain infrastructure from your AI assistant: endpoints, rate limits, security, metrics, logs, and billing. See the [plugin README](../../plugins/build-web3/README.md) for how MCP fits into the broader `build-web3` Claude Code plugin.
 
 ## Requirements
 
-A Quicknode account. Sign up at [quicknode.com](https://www.quicknode.com). MCP access must be enabled by your Windsurf team admin.
+A Quicknode account is required for MCP provider-management actions. Sign up at [quicknode.com](https://www.quicknode.com). MCP access must be enabled by your Windsurf team admin.

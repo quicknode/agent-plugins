@@ -22,12 +22,12 @@ jobs:
       - name: Sync version from tag to server.json
         run: |
           VERSION="${GITHUB_REF#refs/tags/v}"
-          jq --arg v "$VERSION" '.version = $v' plugins/mcp/server.json > plugins/mcp/server.tmp.json
-          mv plugins/mcp/server.tmp.json plugins/mcp/server.json
-          cat plugins/mcp/server.json
+          jq --arg v "$VERSION" '.version = $v' plugins/build-web3/server.json > plugins/build-web3/server.tmp.json
+          mv plugins/build-web3/server.tmp.json plugins/build-web3/server.json
+          cat plugins/build-web3/server.json
 
       - name: Authenticate to MCP Registry via GitHub OIDC
         run: ./mcp-publisher login github-oidc
 
       - name: Publish server to MCP Registry
-        run: ./mcp-publisher publish plugins/mcp/server.json
+        run: ./mcp-publisher publish plugins/build-web3/server.json
