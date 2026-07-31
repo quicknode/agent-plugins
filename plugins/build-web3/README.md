@@ -29,14 +29,14 @@ Minimal starters are the default. Ask for a full template to expand into a large
 ```
 
 **Codex** — add the repository's marketplace and install the plugin. See the
-[Codex install guide](../../docs/install/codex.md) for the local-checkout and GitHub commands.
+[Codex install guide](https://github.com/quicknode/agent-plugins/blob/main/docs/install/codex.md) for the local-checkout and GitHub commands.
 
 **Other clients** — see the per-client guides at the repo root:
 
-- [Cursor](../../docs/install/cursor.md)
-- [Windsurf](../../docs/install/windsurf.md)
-- [VS Code](../../docs/install/vscode.md)
-- [Zed](../../docs/install/zed.md)
+- [Cursor](https://github.com/quicknode/agent-plugins/blob/main/docs/install/cursor.md)
+- [Windsurf](https://github.com/quicknode/agent-plugins/blob/main/docs/install/windsurf.md)
+- [VS Code](https://github.com/quicknode/agent-plugins/blob/main/docs/install/vscode.md)
+- [Zed](https://github.com/quicknode/agent-plugins/blob/main/docs/install/zed.md)
 
 Manual MCP config (works for any client supporting remote MCP):
 
@@ -59,4 +59,4 @@ Generic build guidance does not require a Quicknode account. Quicknode MCP and Q
 
 ## License
 
-MIT. See [LICENSE.md](../../LICENSE.md) at the repo root.
+MIT. See [LICENSE.md](https://github.com/quicknode/agent-plugins/blob/main/LICENSE.md) at the repo root.

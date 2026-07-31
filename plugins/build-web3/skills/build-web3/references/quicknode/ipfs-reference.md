@@ -331,7 +331,7 @@ async function uploadNFTCollection(basePath, count) {
 
 ## Storage Plans
 
-> **Note:** Storage plans and limits may change. Verify current pricing and limits at https://www.quicknode.com/pricing or in the QuickNode dashboard.
+> **Note:** Storage plans and limits may change. Verify current pricing and limits at https://www.quicknode.com/pricing or in the Quicknode dashboard.
 
 | Plan | Storage | Bandwidth | Pins |
 |------|---------|-----------|------|

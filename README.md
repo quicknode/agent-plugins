@@ -6,17 +6,17 @@ Agent plugins from Quicknode for building Web3 apps with AI agents.
 
 | Plugin                              | Description                                                                                                                                                     |
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`build-web3`](./plugins/build-web3/) | Build Web3 apps with your AI agent: choose a chain, architecture, stack, data layer, and production posture. Powered by optional Quicknode infrastructure integration. |
+| [`build-web3`](https://github.com/quicknode/agent-plugins/tree/main/plugins/build-web3) | Build Web3 apps with your AI agent: choose a chain, architecture, stack, data layer, and production posture. Powered by optional Quicknode infrastructure integration. |
 
 ## Install
 
 | Client   | Guide                                                  |
 | -------- | ------------------------------------------------------ |
-| Cursor   | [docs/install/cursor.md](./docs/install/cursor.md)     |
-| Windsurf | [docs/install/windsurf.md](./docs/install/windsurf.md) |
-| VS Code  | [docs/install/vscode.md](./docs/install/vscode.md)     |
-| Zed      | [docs/install/zed.md](./docs/install/zed.md)           |
-| Codex    | [docs/install/codex.md](./docs/install/codex.md)       |
+| Cursor   | [docs/install/cursor.md](https://github.com/quicknode/agent-plugins/blob/main/docs/install/cursor.md)     |
+| Windsurf | [docs/install/windsurf.md](https://github.com/quicknode/agent-plugins/blob/main/docs/install/windsurf.md) |
+| VS Code  | [docs/install/vscode.md](https://github.com/quicknode/agent-plugins/blob/main/docs/install/vscode.md)     |
+| Zed      | [docs/install/zed.md](https://github.com/quicknode/agent-plugins/blob/main/docs/install/zed.md)           |
+| Codex    | [docs/install/codex.md](https://github.com/quicknode/agent-plugins/blob/main/docs/install/codex.md)       |
 
 For Claude Code, add this marketplace and install the `build-web3` plugin:
 
@@ -24,7 +24,7 @@ For Claude Code, add this marketplace and install the `build-web3` plugin:
 /plugin marketplace add quicknode/agent-plugins
 ```
 
-For Codex, see the [Codex install guide](./docs/install/codex.md). Codex discovers this
+For Codex, see the [Codex install guide](https://github.com/quicknode/agent-plugins/blob/main/docs/install/codex.md). Codex discovers this
 repository's plugin through `.agents/plugins/marketplace.json` and uses
 `plugins/build-web3/.codex-plugin/plugin.json` to load the bundled skill and MCP server.
 
@@ -40,4 +40,4 @@ Plugin skills and references in this repo should stay stable, useful, and self-c
 
 ## License
 
-MIT. See [LICENSE.md](./LICENSE.md).
+MIT. See [LICENSE.md](https://github.com/quicknode/agent-plugins/blob/main/LICENSE.md).
