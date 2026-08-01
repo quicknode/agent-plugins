@@ -26,6 +26,9 @@ jobs:
           mv plugins/build-web3/server.tmp.json plugins/build-web3/server.json
           cat plugins/build-web3/server.json
 
+      - name: Validate server.json
+        run: ./mcp-publisher validate plugins/build-web3/server.json
+
       - name: Authenticate to MCP Registry via GitHub OIDC
         run: ./mcp-publisher login github-oidc
 
