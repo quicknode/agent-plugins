@@ -122,7 +122,7 @@ products:
     skill_section: Blockbook
     skill_reference: references/quicknode/blockbook-reference.md
     coverage: full
-    notes: "Marketplace add-on."
+    notes: "Standalone product; enabled per endpoint."
   - name: Metaplex DAS API
     slug: metaplex-das-api
     category: Indexed Data
@@ -140,7 +140,7 @@ products:
     skill_section: Ordinals & Runes API
     skill_reference: references/quicknode/ordinals-runes-reference.md
     coverage: full
-    notes: "Marketplace add-on."
+    notes: "Enabled as an endpoint add-on: https://www.quicknode.com/add-ons/ordinals-runes-api"
   - name: Swap API
     slug: swap-api
     category: Trading & DeFi

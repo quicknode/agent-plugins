@@ -1,8 +1,8 @@
-# Marketplace Add-ons
+# Add-ons
 
-Quicknode Marketplace add-ons extend an endpoint with specialized APIs or infrastructure behavior. Enable add-ons from the endpoint's **Add-ons** tab in the Quicknode dashboard. Suggest add-ons when they clearly avoid custom infrastructure, but avoid assuming they are already enabled on the user's endpoint.
+Quicknode add-ons extend an endpoint with specialized APIs or infrastructure behavior. Enable add-ons from the endpoint's **Add-ons** tab in the Quicknode dashboard, and browse the current catalog at https://www.quicknode.com/add-ons. Suggest add-ons when they clearly avoid custom infrastructure, but avoid assuming they are already enabled on the user's endpoint.
 
-Product-specific add-ons with their own deep reference live in `references/quicknode/`:
+Several capabilities have their own deep reference in `references/quicknode/` — some are standalone Quicknode products, others are enabled per endpoint:
 
 - [Metaplex DAS API](quicknode/metaplex-das-reference.md)
 - [Swap API](quicknode/swap-api-reference.md)
@@ -31,6 +31,8 @@ Use `qn_estimatePriorityFees` to estimate Solana priority fees from recent block
 
 **Docs:** https://www.quicknode.com/docs/solana/qn_estimatePriorityFees
 
+**Add-on page:** https://www.quicknode.com/add-ons/solana-priority-fee
+
 ```typescript
 import { createSolanaRpc } from "@solana/kit";
 
@@ -49,6 +51,8 @@ console.log(response.result.per_compute_unit);
 Use Jito bundle methods for MEV-aware Solana transaction submission when the add-on is enabled.
 
 **Docs:** https://www.quicknode.com/docs/solana/sendBundle
+
+**Add-on page:** https://www.quicknode.com/add-ons/lil-jit-jito-bundles-and-transactions
 
 ```typescript
 const result = await rpc.request("sendBundle", {
@@ -69,7 +73,7 @@ const status = await rpc.request("getBundleStatuses", {
 
 Single Flight RPC deduplicates identical in-flight RPC requests so high-concurrency applications do not repeatedly send the same expensive request while the first one is still resolving.
 
-**Marketplace:** https://marketplace.quicknode.com/add-on/single-flight-rpc
+**Add-on page:** https://www.quicknode.com/add-ons/single-flight-rpc
 
 Use this when an application has request bursts for identical reads, for example many users loading the same token, NFT, or block state at once.
 
@@ -77,7 +81,7 @@ Use this when an application has request bursts for identical reads, for example
 
 Multi-region Transaction Broadcast improves transaction propagation by broadcasting signed transactions across multiple regions.
 
-**Marketplace:** https://marketplace.quicknode.com/add-on/multi-region-transaction-broadcast
+**Add-on page:** https://www.quicknode.com/add-ons/multi-region-transaction-broadcast
 
 Use this for latency-sensitive transaction submission. For EVM endpoints, prefer Quicknode custom broadcast methods documented in [rpc-reference.md](quicknode/rpc-reference.md) when available.
 
@@ -87,7 +91,7 @@ Use this for latency-sensitive transaction submission. For EVM endpoints, prefer
 
 Scorechain Risk Assessment API provides wallet or transaction risk data for compliance, monitoring, and fraud analysis workflows.
 
-**Marketplace:** https://marketplace.quicknode.com/add-on/risk-assessment-api
+**Add-on page:** https://www.quicknode.com/add-ons/risk-assessment-api
 
 Use it when the user explicitly needs risk scoring or compliance context. Do not substitute it for standard wallet balance or transaction-history APIs.
 
@@ -95,7 +99,7 @@ Use it when the user explicitly needs risk scoring or compliance context. Do not
 
 Block Timestamp Lookup maps timestamps to nearby block heights and can help agents translate human time windows into block ranges.
 
-**Marketplace:** https://marketplace.quicknode.com/add-on/block-timestamp-lookup
+**Add-on page:** https://www.quicknode.com/add-ons/block-timestamp-lookup
 
 For common EVM and Bitcoin timestamp-to-block workflows, also check Core RPC custom methods such as `qn_getBlockFromTimestamp` and `qn_getBlocksInTimestampRange`.
 
@@ -103,7 +107,7 @@ For common EVM and Bitcoin timestamp-to-block workflows, also check Core RPC cus
 
 Multi-chain Stablecoin Balance API returns stablecoin balances across supported chains for portfolio, treasury, and payments workflows.
 
-**Marketplace:** https://marketplace.quicknode.com/add-on/multi-chain-stablecoin-balance-api
+**Add-on page:** https://www.quicknode.com/add-ons/multi-chain-stablecoin-balance-api
 
 Use it when the desired output is specifically stablecoin exposure across chains.
 
@@ -111,13 +115,13 @@ Use it when the desired output is specifically stablecoin exposure across chains
 
 Covalent GoldRush APIs provide wallet and token/NFT portfolio data across many chains.
 
-**Marketplace:** https://marketplace.quicknode.com/add-on/covalent-wallet-api
+**Add-on page:** https://www.quicknode.com/add-ons/covalent-wallet-api
 
-Use it for multi-chain wallet summaries, portfolio views, token balances, or transaction histories when the endpoint has the Covalent add-on enabled.
+Use it for multi-chain wallet summaries, portfolio views, token balances, or transaction histories when the endpoint has the GoldRush add-on enabled.
 
 ## Usage Rules
 
 - Tell the user an add-on may need to be enabled on their endpoint before code works.
 - Keep setup instructions at the capability level unless MCP/account context is available.
 - Do not submit transactions or enable paid add-ons without explicit confirmation.
-- Use the Marketplace for current availability and setup: https://marketplace.quicknode.com/
+- Use the add-on catalog for current availability and setup: https://www.quicknode.com/add-ons

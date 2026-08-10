@@ -24,7 +24,7 @@ Use those group names when matching public-site navigation or marketing copy. Us
 | Trading & DeFi | Swap API, Solana Validator, Monad Validator |
 | Platform | Admin API, ChainKit, Key-Value Store, Quicknode SDK |
 | Agent Surface | x402, MPP, Agent Subscriptions, Quicknode CLI, Quicknode MCP |
-| Marketplace Add-ons | Solana Priority Fee API, Jito Bundles, Single Flight RPC, Multi-region Transaction Broadcast, Scorechain Risk Assessment API, Block Timestamp Lookup, Multi-chain Stablecoin Balance API, Covalent GoldRush APIs |
+| Endpoint Add-ons | Solana Priority Fee API, Jito Bundles, Single Flight RPC, Multi-region Transaction Broadcast, Scorechain Risk Assessment API, Block Timestamp Lookup, Multi-chain Stablecoin Balance API, Covalent GoldRush APIs |
 
 ## Product Index
 
@@ -122,4 +122,4 @@ Dedicated Clusters, Validator as a Service, ChainKit, Solana Validator, and Mona
 
 - Prefer full guidance for products an agent can directly use in an app, script, or infrastructure workflow.
 - Keep human/operator-heavy products as catalog entries with links unless the user explicitly asks for planning or sales-engineering style guidance.
-- For Marketplace add-ons, explain enablement at the capability level and link to the Marketplace or docs rather than inventing account-specific setup steps.
+- For endpoint add-ons, explain enablement at the capability level and link to the add-on catalog (https://www.quicknode.com/add-ons) or docs rather than inventing account-specific setup steps.

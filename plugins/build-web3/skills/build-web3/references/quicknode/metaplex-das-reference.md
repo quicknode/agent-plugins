@@ -1,13 +1,13 @@
 # Metaplex DAS API Reference
 
-The Metaplex Digital Asset Standard (DAS) API is a comprehensive service for querying Solana digital assets efficiently. Available as the **Metaplex Digital Asset Standard (DAS) API** add-on in the Quicknode Marketplace.
+The Metaplex Digital Asset Standard (DAS) API is a comprehensive service for querying Solana digital assets efficiently. Available as the **Metaplex DAS API** product on a Quicknode Solana endpoint.
 
 **Marketing:** https://www.quicknode.com/metaplex-das-api
 **Docs:** https://www.quicknode.com/docs/solana/solana-das-api
 
 ## Prerequisites
 
-Enable the **Metaplex Digital Asset Standard (DAS) API** add-on on your Quicknode Solana endpoint via the [Marketplace](https://marketplace.quicknode.com/).
+Enable **Metaplex DAS API** on your Quicknode Solana endpoint from the Quicknode dashboard. Product page: https://www.quicknode.com/metaplex-das-api
 
 ## Supported Asset Types
 
