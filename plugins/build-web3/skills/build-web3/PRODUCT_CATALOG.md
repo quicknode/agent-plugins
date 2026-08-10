@@ -180,12 +180,12 @@ products:
   - name: Quicknode SDK
     slug: quicknode-sdk
     category: Platform
-    docs_url: https://www.quicknode.com/docs/quicknode-sdk
+    docs_url: https://www.quicknode.com/docs/sdk
     marketing_url: https://www.quicknode.com/sdk
     skill_section: Quicknode SDK
     skill_reference: references/quicknode/sdk-reference.md
     coverage: full
-    notes: "Product API SDK, not a chain RPC wrapper."
+    notes: "Product API SDK plus an RPC lane (Tooling Access, x402/MPP payments)."
   - name: x402
     slug: x402
     category: Agent Surface
@@ -216,12 +216,12 @@ products:
   - name: Quicknode CLI
     slug: quicknode-cli
     category: Agent Surface
-    docs_url: https://www.quicknode.com/docs/quicknode-cli
+    docs_url: https://www.quicknode.com/docs/cli
     marketing_url: https://www.quicknode.com/cli
     skill_section: Quicknode CLI
     skill_reference: references/quicknode/cli-reference.md
     coverage: full
-    notes: "Use current singular command groups: endpoint, stream, webhook."
+    notes: "Use current singular command groups: endpoint, stream, webhook. Also covers wallet and paid RPC (x402/MPP)."
   - name: Quicknode MCP
     slug: quicknode-mcp
     category: Agent Surface
@@ -265,8 +265,8 @@ products:
 5. Keep product-specific references in `references/quicknode/` separate from the provider-neutral
    files directly under `references/` — only Quicknode-specific product docs live in the subfolder.
 6. Verify CLI and SDK examples against the current docs before release:
-   - https://www.quicknode.com/docs/quicknode-cli
-   - https://www.quicknode.com/docs/quicknode-sdk
+   - https://www.quicknode.com/docs/cli
+   - https://www.quicknode.com/docs/sdk
 7. Bump plugin versions in `plugins/build-web3/.claude-plugin/marketplace.json`,
    `plugins/build-web3/.claude-plugin/plugin.json`, and `plugins/build-web3/.cursor-plugin/plugin.json`:
    - minor version for new products or substantial restructuring
