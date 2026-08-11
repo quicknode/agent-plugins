@@ -18,10 +18,10 @@ Several capabilities have their own deep reference in `references/quicknode/` â€
 | Jito Bundles | The app needs Solana bundle submission or MEV-aware transaction delivery |
 | Single Flight RPC | Many identical in-flight RPC reads should be deduplicated |
 | Multi-region Transaction Broadcast | Latency-sensitive transaction propagation matters |
-| Scorechain Risk Assessment API | Wallet or transaction risk scoring is required |
+| Risk Assessment API | Wallet or transaction risk scoring is required |
 | Block Timestamp Lookup | The app needs timestamp-to-block range conversion |
 | Multi-chain Stablecoin Balance API | Treasury, payment, or portfolio workflows need stablecoin balances across chains |
-| Covalent GoldRush APIs | The app needs multi-chain wallet, token, or NFT summaries |
+| GoldRush Multichain Data APIs | The app needs multi-chain wallet, token, or NFT summaries |
 
 ## Solana Add-ons
 
@@ -87,9 +87,9 @@ Use this for latency-sensitive transaction submission. For EVM endpoints, prefer
 
 ## Data and Risk Add-ons
 
-### Scorechain Risk Assessment API
+### Risk Assessment API
 
-Scorechain Risk Assessment API provides wallet or transaction risk data for compliance, monitoring, and fraud analysis workflows.
+Risk Assessment API provides wallet or transaction risk data for compliance, monitoring, and fraud analysis workflows.
 
 **Add-on page:** https://www.quicknode.com/add-ons/risk-assessment-api
 
@@ -111,9 +111,9 @@ Multi-chain Stablecoin Balance API returns stablecoin balances across supported 
 
 Use it when the desired output is specifically stablecoin exposure across chains.
 
-### Covalent GoldRush Wallet/Data APIs
+### GoldRush Multichain Data APIs
 
-Covalent GoldRush APIs provide wallet and token/NFT portfolio data across many chains.
+GoldRush Multichain Data APIs provide wallet and token/NFT portfolio data across many chains.
 
 **Add-on page:** https://www.quicknode.com/add-ons/covalent-wallet-api
 

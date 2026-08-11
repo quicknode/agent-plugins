@@ -24,7 +24,7 @@ Use those group names when matching public-site navigation or marketing copy. Us
 | Trading & DeFi | Swap API, Solana Validator, Monad Validator |
 | Platform | Admin API, ChainKit, Key-Value Store, Quicknode SDK |
 | Agent Surface | x402, MPP, Agent Subscriptions, Quicknode CLI, Quicknode MCP |
-| Endpoint Add-ons | Solana Priority Fee API, Jito Bundles, Single Flight RPC, Multi-region Transaction Broadcast, Scorechain Risk Assessment API, Block Timestamp Lookup, Multi-chain Stablecoin Balance API, Covalent GoldRush APIs |
+| Endpoint Add-ons | Solana Priority Fee API, Jito Bundles, Single Flight RPC, Multi-region Transaction Broadcast, Risk Assessment API, Block Timestamp Lookup, Multi-chain Stablecoin Balance API, GoldRush Multichain Data APIs |
 
 ## Product Index
 
