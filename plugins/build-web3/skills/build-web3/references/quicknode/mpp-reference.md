@@ -263,6 +263,13 @@ mppx -X POST -H 'Content-Type: application/json' \
 
 Environment variables: `MPPX_PRIVATE_KEY`, `MPPX_ACCOUNT`
 
+## Using MPP From The Quicknode CLI Or SDK
+
+The Quicknode CLI and SDK wrap this gateway, so an agent can pay for RPC calls without writing payment code or installing `mppx`:
+
+- CLI (v0.6.0+): `qn wallet generate --vm evm` then `qn rpc call --mpp`, or a channel via `qn rpc mpp open` and `--mpp-session`. See [cli-reference.md](cli-reference.md#paid-rpc-x402-and-mpp).
+- SDK (Node 3.8.0+, other languages 0.8.0+): set `rpc.payment` with `scheme: "mpp"`, or use `mppOpen`/`mppSessionCall`. See [sdk-reference.md](sdk-reference.md#rpc-micropayments).
+
 ## Payment Receipts
 
 ```typescript

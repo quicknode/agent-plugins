@@ -266,6 +266,13 @@ console.log('Credits received:', dripResult);
 6. **Multi-protocol support.** The same client works with JSON-RPC, REST, gRPC-Web (`client.createGrpcTransport()`), and WebSocket (`client.createWebSocket()`).
 7. **Discover dynamically.** Use `/networks`, `/discovery/resources`, or `/openapi.json` instead of hardcoding the supported network list.
 
+## Using x402 From The CLI Or SDK
+
+The Quicknode CLI and SDK wrap this gateway, so an agent can pay for RPC calls without writing payment code:
+
+- CLI (v0.6.0+): `qn wallet generate` then `qn rpc call --x402`, or prepaid credits via `qn rpc x402 buy-credits` and `--x402-drawdown`. See [cli-reference.md](cli-reference.md#paid-rpc-x402-and-mpp).
+- SDK (Node 3.8.0+, other languages 0.8.0+): set `rpc.payment` with `scheme: "x402"`, or use `gatewayAuthenticate`/`gatewayBuyCredits`/`gatewayDrawdownCall`. See [sdk-reference.md](sdk-reference.md#rpc-micropayments).
+
 ## Documentation
 
 - **x402 Platform**: https://x402.quicknode.com

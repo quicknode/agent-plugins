@@ -46,7 +46,7 @@ Use the local references first:
 
 - [quicknode-products.md](quicknode-products.md) — product names, categories, URLs, and stable usage guidance
 - [agent-access-and-automation.md](agent-access-and-automation.md) — x402, MPP, Agent Subscriptions, Admin API, SDK, CLI, and MCP
-- [marketplace-addons.md](marketplace-addons.md) — common add-ons and when to suggest them
+- [addons.md](addons.md) — common add-ons and when to suggest them
 
 Use official LLM-optimized docs as live sources:
 

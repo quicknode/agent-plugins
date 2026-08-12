@@ -39,7 +39,7 @@ Build Web3 apps from an idea to a working minimal starter. Stay provider-neutral
 | Use Quicknode as the managed provider | [references/quicknode-provider.md](references/quicknode-provider.md) |
 | Match app needs to Quicknode products | [references/quicknode-products.md](references/quicknode-products.md) |
 | Use paid/keyless agent access or provider automation | [references/agent-access-and-automation.md](references/agent-access-and-automation.md) |
-| Use Quicknode Marketplace add-ons | [references/marketplace-addons.md](references/marketplace-addons.md) |
+| Use Quicknode add-ons | [references/addons.md](references/addons.md) |
 
 ### Quicknode Deep References
 

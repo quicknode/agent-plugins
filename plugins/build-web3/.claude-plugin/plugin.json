@@ -1,7 +1,7 @@
 {
   "name": "build-web3",
   "description": "Build and improve Web3 apps with your AI agent, with optional Quicknode infrastructure for RPC access, live onchain events, historical data, and wallet-paid API access.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Quicknode",
     "url": "https://www.quicknode.com"

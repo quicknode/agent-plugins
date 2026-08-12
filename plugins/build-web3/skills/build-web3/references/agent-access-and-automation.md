@@ -20,6 +20,7 @@ Use x402 or MPP for wallet-paid or pay-per-request access patterns. These also w
 - Use testnet or capped flows first when the user is experimenting.
 - Do not ask for private keys. Use wallet connectors, delegated payment flows, or placeholders.
 - Starting June 9, 2026, each wallet gets a single free pool of 1,000,000 API credits/month across x402 and MPP on testnet (RPC requests cost 1 credit each; SQL Explorer costs the query's variable credit usage), resetting on the 1st of the month; paid usage continues at the per-model rate after that. Mainnet wallets are uncapped. See [x402-reference.md](quicknode/x402-reference.md#testnet-monthly-cap) / [mpp-reference.md](quicknode/mpp-reference.md#testnet-monthly-cap) and confirm against current docs before quoting the number.
+- The fastest path is usually the Quicknode CLI or SDK rather than the gateway packages: `qn wallet generate` plus `qn rpc call --x402`/`--mpp` (CLI v0.6.0+), or `rpc.payment` on the SDK (Node 3.8.0+, other languages 0.8.0+). Both need no Quicknode account or API key. See [cli-reference.md](quicknode/cli-reference.md#paid-rpc-x402-and-mpp) and [sdk-reference.md](quicknode/sdk-reference.md#rpc-micropayments).
 - Docs: https://www.quicknode.com/docs/build-with-ai
 - See [x402-reference.md](quicknode/x402-reference.md) for SIWX authentication, credit management, and `@quicknode/x402` setup.
 - See [mpp-reference.md](quicknode/mpp-reference.md) for charge vs. session intents, Solana setup, CLI usage, and payment receipts.
@@ -38,8 +39,8 @@ Use Agent Subscriptions when an autonomous agent needs persistent Quicknode plat
 Use these for provider automation after the user has chosen Quicknode.
 
 - Admin API: account and endpoint automation over REST. See [admin-api-reference.md](quicknode/admin-api-reference.md).
-- Quicknode SDK: typed product API access from TypeScript. See [sdk-reference.md](quicknode/sdk-reference.md).
-- Quicknode CLI: terminal automation for endpoints, Streams, Webhooks, KV, and SQL. See [cli-reference.md](quicknode/cli-reference.md).
+- Quicknode SDK: typed product API access from TypeScript, Python, Rust, and Ruby, plus RPC via Tooling Access or x402/MPP payments. See [sdk-reference.md](quicknode/sdk-reference.md).
+- Quicknode CLI: terminal automation for endpoints, Streams, Webhooks, KV, and SQL, plus RPC via Tooling Access or x402/MPP payments. See [cli-reference.md](quicknode/cli-reference.md).
 - Quicknode MCP: assistant-native inspection and management of endpoints, usage, billing, logs, metrics, and security options when the client supports the available tools. See [mcp-reference.md](quicknode/mcp-reference.md).
 
 Prefer generic starter code until provider automation is actually required. Ask for confirmation before provisioning, archiving, changing endpoint security, changing rate limits, or starting paid usage.
