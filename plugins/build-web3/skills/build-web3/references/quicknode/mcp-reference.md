@@ -110,7 +110,7 @@ codex mcp add quicknode \
 
 ## Blockchain RPC (Tooling Access)
 
-`call-rpc` sends a read-only JSON-RPC request to the account's Tooling Access endpoint: one shared, multichain endpoint Quicknode provisions per account. No endpoint provisioning, URL, or token handling. The server mints and refreshes the short-lived credential per call. This is the same account setting behind `qn rpc call` in the CLI and the `rpc` client in the SDK, so enabling it once covers all three.
+`call-rpc` sends a read-only JSON-RPC request through the account's Tooling Access setting, which covers every network Quicknode supports. No endpoint provisioning, URL, or token handling. The server mints and refreshes the short-lived credential per call. This is the same account setting behind `qn rpc call` in the CLI and the `rpc` client in the SDK, so enabling it once covers all three.
 
 ### Inputs
 
@@ -124,7 +124,7 @@ One tool covers every chain family: `eth_getBalance` on `base-mainnet`, `getSlot
 
 ### Network Slugs
 
-Tooling Access slugs do not always match the network slugs `list-chains` returns. Two known differences: Ethereum mainnet is `ethereum-mainnet` (not `mainnet`), and Polygon mainnet is `polygon` (not `matic`). When the server rejects a slug it returns an error listing every slug the endpoint accepts; read the accepted list from that error rather than guessing. `qn rpc list-networks` prints the same list from the CLI.
+Use the network slugs `list-chains` returns. If the server rejects a slug, the error lists every slug it accepts; read the accepted list from that error rather than guessing. `qn rpc list-networks` prints the same list from the CLI.
 
 ### Read-Only Enforcement
 
@@ -138,7 +138,7 @@ To send transactions, provision a dedicated endpoint (`create-endpoint`) and sig
 
 ### Enabling And Disabling
 
-`enable-tooling-access` provisions the endpoint and caches the credential. `disable-tooling-access` turns the setting off. Both take no arguments and are idempotent, and both require the **Admin** role. A Viewer connection can call `call-rpc` once Tooling Access is on, but cannot turn it on; if `call-rpc` fails because the setting is off, ask the user to reconnect with Admin or enable it from another interface.
+`enable-tooling-access` turns the setting on for the account. `disable-tooling-access` turns it off. Both take no arguments and are idempotent, and both require the **Admin** role. A Viewer connection can call `call-rpc` once Tooling Access is on, but cannot turn it on; if `call-rpc` fails because the setting is off, ask the user to reconnect with Admin or enable it from another interface.
 
 `disable-tooling-access` is account-wide: it cuts off RPC access for every Quicknode developer tool on the account, including the CLI and the SDK, not just the current assistant. Confirm with the user before calling it.
 
@@ -153,7 +153,7 @@ The Quicknode MCP server exposes tools for blockchain RPC and the Admin API surf
 | Tool | Description |
 |------|-------------|
 | `call-rpc` | Call a read-only JSON-RPC method on any supported network via Tooling Access |
-| `enable-tooling-access` | Enable account-level Tooling Access and provision the shared multichain endpoint |
+| `enable-tooling-access` | Turn on account-level Tooling Access so Quicknode developer tools can make RPC calls |
 | `disable-tooling-access` | Disable account-level Tooling Access (account-wide; confirm first) |
 
 ### Endpoint Management
@@ -207,7 +207,7 @@ Quicknode MCP also exposes endpoint details as MCP resources in clients that sup
 ## Example Prompts
 
 - "What is the current block number on Base?"
-- "Get the balance of this Solana address"
+- "Get the balance of 7cVfgArCheMR6Cs4t6vz5rfnqd56vZq4ndaBrY5xkxXy on Solana mainnet"
 - "Compare the latest block timestamp on Ethereum and Arbitrum"
 - "List all my Quicknode endpoints"
 - "Create a new Ethereum mainnet endpoint"
