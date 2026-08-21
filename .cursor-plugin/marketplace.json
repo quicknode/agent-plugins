@@ -13,7 +13,7 @@
     {
       "name": "build-web3",
       "source": "./plugins/build-web3",
-      "description": "Build and improve Web3 apps with your agents, with optional Quicknode MCP integration for managed blockchain infrastructure."
+      "description": "Build and improve Web3 apps with your agents, with optional Quicknode MCP integration for live blockchain data and managed infrastructure."
     }
   ]
 }

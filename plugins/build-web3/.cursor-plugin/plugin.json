@@ -1,8 +1,8 @@
 {
   "name": "build-web3",
   "displayName": "Build Web3",
-  "version": "1.0.1",
-  "description": "Build and improve Web3 apps with your agents, with optional Quicknode MCP integration for managed blockchain infrastructure.",
+  "version": "1.0.2",
+  "description": "Build and improve Web3 apps with your agents, with optional Quicknode MCP integration for live blockchain data and managed infrastructure.",
   "author": {
     "name": "Quicknode",
     "email": "support@quicknode.com"

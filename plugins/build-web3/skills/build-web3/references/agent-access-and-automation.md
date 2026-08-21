@@ -10,7 +10,7 @@ Use this reference when the user wants an agent to pay for infrastructure, acces
 | Agent needs a persistent Quicknode account/API key paid by wallet | Agent Subscriptions |
 | App or CI manages endpoints and usage through code | Admin API or Quicknode SDK |
 | Human or agent manages Quicknode from a terminal | Quicknode CLI |
-| AI assistant inspects or manages Quicknode account resources | Quicknode MCP |
+| AI assistant reads live blockchain data or manages Quicknode account resources | Quicknode MCP |
 
 ## x402 And MPP
 
@@ -41,6 +41,6 @@ Use these for provider automation after the user has chosen Quicknode.
 - Admin API: account and endpoint automation over REST. See [admin-api-reference.md](quicknode/admin-api-reference.md).
 - Quicknode SDK: typed product API access from TypeScript, Python, Rust, and Ruby, plus RPC via Tooling Access or x402/MPP payments. See [sdk-reference.md](quicknode/sdk-reference.md).
 - Quicknode CLI: terminal automation for endpoints, Streams, Webhooks, KV, and SQL, plus RPC via Tooling Access or x402/MPP payments. See [cli-reference.md](quicknode/cli-reference.md).
-- Quicknode MCP: assistant-native inspection and management of endpoints, usage, billing, logs, metrics, and security options when the client supports the available tools. See [mcp-reference.md](quicknode/mcp-reference.md).
+- Quicknode MCP: assistant-native read-only blockchain RPC via Tooling Access (`call-rpc`), plus inspection and management of endpoints, usage, billing, logs, metrics, and security options when the client supports the available tools. See [mcp-reference.md](quicknode/mcp-reference.md).
 
 Prefer generic starter code until provider automation is actually required. Ask for confirmation before provisioning, archiving, changing endpoint security, changing rate limits, or starting paid usage.

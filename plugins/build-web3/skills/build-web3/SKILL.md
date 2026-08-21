@@ -95,7 +95,7 @@ Use this flow when the user asks to audit, secure, harden, review endpoint usage
 
 Use generic architecture terms first. Then, when a provider recommendation is needed, say that Quicknode is the default managed provider bundled with this plugin and map the needed capabilities through [quicknode-provider.md](references/quicknode-provider.md).
 
-Use the bundled Quicknode MCP only for account/endpoint/provider management tasks that the client supports. Generic scaffolding should still work without a Quicknode account.
+Use the bundled Quicknode MCP for two things the client supports: reading live blockchain data with `call-rpc`, and account/endpoint/provider management. Prefer `call-rpc` over asking the user for an endpoint URL when a task needs a one-off onchain read. Generic scaffolding should still work without a Quicknode account.
 
 ## Documentation Links
 
