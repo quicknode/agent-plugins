@@ -11,61 +11,117 @@ Blockchain → Quicknode → Filter Function → Transform → Destination
 
 ## Stream Types
 
-When creating a stream via the API, specify the `dataset` parameter:
+When creating a stream via the API, specify the `dataset` parameter. The API
+validates this against a closed enum and rejects anything else with HTTP 400, so
+the value must match exactly. The authoritative list is the `dataset` enum in
+<https://api.quicknode.com/streams/rest/openapi.json>.
 
 | Stream Type | `dataset` Value |
 |-------------|----------------|
 | Block | `block` |
 | Block with Receipts | `block_with_receipts` |
-| Transaction | `transaction` |
-| Logs | `log` |
-| Receipt | `receipt` |
+| Transactions | `transactions` |
+| Logs | `logs` |
+| Receipts | `receipts` |
+| Traces (`trace_block`) | `trace_blocks` |
+| Traces (`debug_trace`) | `debug_traces` |
+| Block + Receipts + `debug_trace` | `block_with_receipts_debug_trace` |
+| Block + Receipts + `trace_block` | `block_with_receipts_trace_block` |
+| Block with Beacon | `block_with_beacon` |
+| Solana Programs + Logs | `programs_with_logs` |
+| XRPL Ledger | `ledger` |
+| HyperCore Events | `events` |
+| HyperCore Orders | `orders` |
+| HyperCore Events + Orders | `events_with_orders` |
+| HyperCore Trades | `trades` |
+| HyperCore Book Updates | `book_updates` |
+| HyperCore TWAP | `twap` |
+| HyperCore Writer Actions | `writer_actions` |
+
+Availability varies by chain and plan — see
+[Data Sources](https://www.quicknode.com/docs/streams/data-sources).
+
+## Payload Shape: `stream.data` Nesting
+
+`stream.data` is **always an array**, and its nesting depth depends on the
+dataset. Treating it as a single object silently yields `undefined` — or throws
+partway through the filter — so index to the depth the dataset actually uses.
+
+The **outer dimension is the batch**: `stream.data.length` equals the number of
+blocks delivered, which is `dataset_batch_size` (default `1`). Indexing
+`stream.data[0]` only ever reads the first block, so it silently drops the rest
+on any stream with a batch size above 1 — iterate instead.
+
+| `dataset` | Structure | Iterate |
+|-----------|-----------|---------|
+| `block` | `data[block]` | `for (const block of stream.data)` |
+| `block_with_receipts` | `data[block]` → `{ block, receipts }` | `for (const entry of stream.data)` |
+| `transactions` | `data[block][tx]` | nest 2 loops |
+| `receipts` | `data[block][receipt]` | nest 2 loops |
+| `programs_with_logs` | `data[slot][tx]` | nest 2 loops |
+| `logs` | `data[block][tx][log]` | nest 3 loops |
+
+Note the middle dimension for `logs`: logs are grouped **per transaction**, not
+flat per block. On Ethereum block 21000000 the block's entry holds 181 groups —
+one per transaction — and every log in a group shares one `transactionHash`.
+
+> **Verify before deploying.** Run every filter through
+> `POST /streams/test_filter` (or `qn stream test-filter`) against a known block
+> and assert the item count. A filter that returns `null` because it crashed is
+> indistinguishable from one that correctly matched nothing.
 
 ### Block Streams
+
+**Test:** `ethereum-mainnet` · block `21000000` — 1 entry, `transactionCount: 181`
 
 Receive full block data including all transactions.
 
 ```javascript
 function main(stream) {
-  const block = stream.data;
-
-  return {
+  return stream.data.map(block => ({
     blockNumber: block.number,
     timestamp: block.timestamp,
     transactionCount: block.transactions.length,
     gasUsed: block.gasUsed,
     baseFeePerGas: block.baseFeePerGas
-  };
+  }));
 }
 ```
 
 ### Transaction Streams
 
-Receive individual transaction data.
+**Test:** `ethereum-mainnet` · block `21000000` — 1 transaction over 10 ETH
+
+Receive every transaction in the block. `stream.data` is `data[block][tx]`, so
+each entry of `stream.data` is that block's array of transactions — one
+invocation covers many transactions, and possibly many blocks.
 
 ```javascript
 function main(stream) {
-  const tx = stream.data;
-
-  // Filter high-value transactions (> 10 ETH)
-  const value = BigInt(tx.value);
   const threshold = BigInt('10000000000000000000'); // 10 ETH
+  const large = [];
 
-  if (value > threshold) {
-    return {
-      hash: tx.hash,
-      from: tx.from,
-      to: tx.to,
-      value: tx.value,
-      gasPrice: tx.gasPrice
-    };
+  for (const txs of stream.data) {
+    for (const tx of txs) {
+      if (BigInt(tx.value || '0') > threshold) large.push(tx);
+    }
   }
 
-  return null; // Filter out
+  if (large.length === 0) return null; // Filter out
+
+  return large.map((tx) => ({
+    hash: tx.hash,
+    from: tx.from,
+    to: tx.to,
+    value: tx.value,
+    gasPrice: tx.gasPrice
+  }));
 }
 ```
 
 ### Logs Streams
+
+**Test:** `ethereum-mainnet` · block `21000000` — 187 Transfer logs
 
 Receive contract event logs.
 
@@ -73,36 +129,56 @@ Receive contract event logs.
 function main(stream) {
   const TRANSFER_TOPIC = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
 
-  const transfers = stream.data.filter(log =>
-    log.topics[0] === TRANSFER_TOPIC
-  );
+  const transfers = [];
 
-  return transfers.map(log => ({
-    contract: log.address,
-    from: '0x' + log.topics[1].slice(26),
-    to: '0x' + log.topics[2].slice(26),
-    value: log.data,
-    blockNumber: log.blockNumber,
-    transactionHash: log.transactionHash
-  }));
+  // data[block][tx][log]
+  for (const blockLogs of stream.data) {
+    for (const txLogs of blockLogs) {
+      for (const log of txLogs) {
+        if (log.topics[0] !== TRANSFER_TOPIC) continue;
+
+        transfers.push({
+          contract: log.address,
+          from: '0x' + log.topics[1].slice(26),
+          to: '0x' + log.topics[2].slice(26),
+          value: log.data,
+          blockNumber: log.blockNumber,
+          transactionHash: log.transactionHash
+        });
+      }
+    }
+  }
+
+  if (transfers.length === 0) return null;
+
+  return transfers;
 }
 ```
 
 ### Receipt Streams
 
-Receive transaction receipts with execution results.
+**Test:** `ethereum-mainnet` · block `21000000` — 181 receipts
+
+Receive every receipt in the block. `stream.data` is `data[block][receipt]`, so
+each entry of `stream.data` is that block's array of receipts.
 
 ```javascript
 function main(stream) {
-  const receipt = stream.data;
+  const out = [];
 
-  return {
-    transactionHash: receipt.transactionHash,
-    status: receipt.status === '0x1' ? 'success' : 'failed',
-    gasUsed: receipt.gasUsed,
-    effectiveGasPrice: receipt.effectiveGasPrice,
-    logsCount: receipt.logs.length
-  };
+  for (const receipts of stream.data) {
+    for (const receipt of receipts) {
+      out.push({
+        transactionHash: receipt.transactionHash,
+        status: receipt.status === '0x1' ? 'success' : 'failed',
+        gasUsed: receipt.gasUsed,
+        effectiveGasPrice: receipt.effectiveGasPrice,
+        logsCount: receipt.logs.length
+      });
+    }
+  }
+
+  return out;
 }
 ```
 
@@ -110,29 +186,47 @@ function main(stream) {
 
 ### Function Signature
 
+**Test:** `ethereum-mainnet` · block `21000000` — `blocksInBatch: 1`
+
+`main(stream)` receives one object with exactly two keys: `data` and `metadata`.
+
 ```javascript
 function main(stream) {
-  // stream.data - Blockchain data (block, tx, logs, receipt)
-  // stream.metadata - Stream metadata (network, streamId, etc.)
+  // stream.data — ALWAYS an array of the batch's items, never a bare object.
+  //   Nesting depends on the dataset (see Payload Shape above):
+  //   The outer dimension is the batch — one entry per block delivered.
+  //     block, block_with_receipts  ->  each entry is the object
+  //     transactions, receipts      ->  each entry is an array of items
+  //     logs                        ->  each entry is an array of per-tx log arrays
+  const data = stream.data;
 
-  // Return data to send to destination
-  // Return null to filter out
-  return processedData;
+  // stream.metadata — every key is snake_case:
+  //   network, dataset, stream_id, stream_name, stream_region,
+  //   start_range, end_range, batch_start_range, batch_end_range,
+  //   keep_distance_from_tip, data_size_bytes, reorgs, blocks_reorged
+  const { network, batch_start_range: block } = stream.metadata;
+
+  // Return the payload to deliver, or null to deliver nothing for this batch.
+  return { network, block, blocksInBatch: data.length };
 }
 ```
 
 ### Available Utilities
 
+**Test:** `ethereum-mainnet` · block `21000000` — `decimal: 253432`
+
 ```javascript
 function main(stream) {
+  const tx = stream.data[0][0]; // first tx of the first block in the batch
+
   // BigInt for large numbers
-  const value = BigInt(stream.data.value);
+  const value = BigInt(tx.value);
 
   // Hex conversions
-  const decimal = parseInt(stream.data.gasUsed, 16);
+  const decimal = parseInt(tx.gas, 16);
 
   // String operations
-  const address = stream.data.to.toLowerCase();
+  const address = tx.to.toLowerCase();
 
   return { value: value.toString(), decimal, address };
 }
@@ -140,32 +234,38 @@ function main(stream) {
 
 ### Complex Filter Example
 
+**Test:** `ethereum-mainnet` · block `21000000` — 22 swaps
+
+> **Filter swaps by topic, not by router address.** A `Swap` event's
+> `log.address` is the **pool/pair** contract that emitted it, never the router
+> the user called. Matching on router addresses yields zero results — on
+> Ethereum block 21000000 there are 22 `Swap` events and none are emitted by a
+> router. Identify the DEX by event signature, then map the pool address if you
+> need to.
+
 ```javascript
 function main(stream) {
-  // Monitor multiple DEX contracts for swap events
-  const DEX_CONTRACTS = [
-    '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D', // Uniswap V2
-    '0xE592427A0AEce92De3Edee1F18E0157C05861564', // Uniswap V3
-    '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F', // SushiSwap
-  ].map(a => a.toLowerCase());
+  const SWAP_TOPICS = {
+    '0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822': 'uniswap-v2', // and V2 forks (SushiSwap, …)
+    '0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67': 'uniswap-v3',
+  };
 
-  const SWAP_TOPICS = [
-    '0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822', // V2 Swap
-    '0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67', // V3 Swap
-  ];
-
-  const swaps = stream.data.filter(log =>
-    DEX_CONTRACTS.includes(log.address.toLowerCase()) &&
-    SWAP_TOPICS.includes(log.topics[0])
-  );
+  const swaps = [];
+  for (const blockLogs of stream.data) {
+    for (const txLogs of blockLogs) {
+      for (const log of txLogs) {
+        if (SWAP_TOPICS[log.topics[0]]) swaps.push(log);
+      }
+    }
+  }
 
   if (swaps.length === 0) return null;
 
   return swaps.map(log => ({
-    dex: log.address,
+    amm: SWAP_TOPICS[log.topics[0]],
+    pool: log.address,          // the pair/pool, not the router
     txHash: log.transactionHash,
     blockNumber: log.blockNumber,
-    topic: log.topics[0],
     data: log.data
   }));
 }
@@ -276,12 +376,14 @@ Streams filter functions can use the `qnLib` helper to persist state across invo
 
 ```javascript
 async function main(stream) {
-  const tx = stream.data;
+  const txs = stream.data.flatMap(block => block);
+  const senders = [...new Set(txs.map((t) => t.from))];
 
-  // Check if sender is on our watchlist
-  const isWatched = await qnLib.qnContainsListItems('watchlist', [tx.from]);
+  const watched = new Set(await qnLib.qnContainsListItems('watchlist', senders));
 
-  if (isWatched.includes(tx.from)) {
+  const hits = [];
+  for (const tx of txs) {
+    if (!watched.has(tx.from)) continue;
     // Store the transaction hash in a set for later retrieval
     await qnLib.qnAddSet('watched_txs', tx.hash, JSON.stringify({
       from: tx.from,
@@ -290,16 +392,16 @@ async function main(stream) {
       block: tx.blockNumber
     }));
 
-    return {
+    hits.push({
       type: 'watchlist_hit',
       hash: tx.hash,
       from: tx.from,
       to: tx.to,
       value: tx.value
-    };
+    });
   }
 
-  return null;
+  return hits.length ? hits : null;
 }
 ```
 
@@ -309,13 +411,20 @@ See the [Key-Value Store docs](https://www.quicknode.com/docs/key-value-store) f
 
 ### Monitor Specific Contract
 
+**Test:** `ethereum-mainnet` · block `21000000` — 24 USDT events
+
 ```javascript
 function main(stream) {
   const TARGET_CONTRACT = '0xdAC17F958D2ee523a2206206994597C13D831ec7'; // USDT
 
-  const logs = stream.data.filter(log =>
-    log.address.toLowerCase() === TARGET_CONTRACT.toLowerCase()
-  );
+  const logs = [];
+  for (const blockLogs of stream.data) {
+    for (const txLogs of blockLogs) {
+      for (const log of txLogs) {
+        if (log.address.toLowerCase() === TARGET_CONTRACT.toLowerCase()) logs.push(log);
+      }
+    }
+  }
 
   return logs.length > 0 ? { events: logs } : null;
 }
@@ -323,38 +432,50 @@ function main(stream) {
 
 ### Track Whale Transactions
 
+**Test:** `ethereum-mainnet` · block `21000280` — 1 whale (2143 ETH). Returns `null` on most blocks — 1000+ ETH transfers are rare
+
 ```javascript
 function main(stream) {
   const WHALE_THRESHOLD = BigInt('1000000000000000000000'); // 1000 ETH
 
-  const tx = stream.data;
-  const value = BigInt(tx.value || '0');
-
-  if (value >= WHALE_THRESHOLD) {
-    return {
-      type: 'whale_transaction',
-      hash: tx.hash,
-      from: tx.from,
-      to: tx.to,
-      valueEth: (Number(value) / 1e18).toFixed(2)
-    };
+  const whales = [];
+  for (const txs of stream.data) {
+    for (const tx of txs) {
+      if (BigInt(tx.value || '0') >= WHALE_THRESHOLD) whales.push(tx);
+    }
   }
 
-  return null;
+  if (whales.length === 0) return null;
+
+  return whales.map((tx) => ({
+    type: 'whale_transaction',
+    hash: tx.hash,
+    from: tx.from,
+    to: tx.to,
+    valueEth: (Number(BigInt(tx.value)) / 1e18).toFixed(2)
+  }));
 }
 ```
 
 ### NFT Transfer Tracking
+
+**Test:** `ethereum-mainnet` · block `21000000` — 2 ERC-721 transfers
 
 ```javascript
 function main(stream) {
   // ERC-721 Transfer event
   const TRANSFER_TOPIC = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
 
-  const nftTransfers = stream.data.filter(log =>
-    log.topics[0] === TRANSFER_TOPIC &&
-    log.topics.length === 4 // ERC-721 has tokenId in topics[3]
-  );
+  const nftTransfers = [];
+  for (const blockLogs of stream.data) {
+    for (const txLogs of blockLogs) {
+      for (const log of txLogs) {
+        if (log.topics[0] === TRANSFER_TOPIC && log.topics.length === 4) {
+          nftTransfers.push(log); // ERC-721 has tokenId in topics[3]
+        }
+      }
+    }
+  }
 
   return nftTransfers.map(log => ({
     contract: log.address,
@@ -370,32 +491,58 @@ function main(stream) {
 
 ### Monitor Program Logs
 
+**Test:** `solana-mainnet` · block `300000000` — 123 SPL Token transactions
+
 ```javascript
 function main(stream) {
   const PROGRAM_ID = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'; // SPL Token
 
-  const programLogs = stream.data.filter(log =>
-    log.programId === PROGRAM_ID
-  );
+  // data[slot][tx]; each tx has programInvocations[], logs[], signature, success
+  const matches = [];
+  for (const slotTxs of stream.data) {
+    for (const tx of slotTxs) {
+      if ((tx.programInvocations || []).some(inv => inv.programId === PROGRAM_ID)) {
+        matches.push(tx);
+      }
+    }
+  }
 
-  return programLogs.length > 0 ? { logs: programLogs } : null;
+  if (matches.length === 0) return null;
+
+  return matches.map(tx => ({
+    signature: tx.signature,
+    slot: tx.slot,
+    success: tx.success,
+    logs: tx.logs
+  }));
 }
 ```
 
 ### Track SOL Transfers
 
+**Test:** `solana-mainnet` · block `300000000` — 389 balance deltas
+
 ```javascript
 function main(stream) {
   const THRESHOLD = 1000000000000; // 1000 SOL in lamports
 
-  const tx = stream.data;
+  // Balances are per-account on each instruction, as pre/postBalance pairs.
+  const transfers = [];
 
-  const transfers = tx.meta?.preBalances?.map((pre, i) => ({
-    account: tx.transaction.message.accountKeys[i],
-    change: tx.meta.postBalances[i] - pre
-  })).filter(t => Math.abs(t.change) >= THRESHOLD);
+  for (const slotTxs of stream.data) {
+    for (const tx of slotTxs) {
+      for (const inv of tx.programInvocations || []) {
+        for (const acct of inv.instruction?.accounts || []) {
+          const change = acct.postBalance - acct.preBalance;
+          if (Math.abs(change) >= THRESHOLD) {
+            transfers.push({ signature: tx.signature, account: acct.pubkey, change });
+          }
+        }
+      }
+    }
+  }
 
-  return transfers?.length > 0 ? { transfers } : null;
+  return transfers.length > 0 ? { transfers } : null;
 }
 ```
 
@@ -404,33 +551,93 @@ function main(stream) {
 ### Create Stream
 
 ```bash
+# filter_function must be base64-encoded source.
+FILTER=$(printf 'function main(stream) { return stream.data; }' | base64)
+
 curl -X POST https://api.quicknode.com/streams/rest/v1/streams \
-  -H "Authorization: Bearer $QUICKNODE_API_KEY" \
+  -H "x-api-key: $QUICKNODE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "My Stream",
     "network": "ethereum-mainnet",
     "dataset": "receipts",
-    "filterFunction": "function main(stream) { return stream.data; }",
-    "destination": {
-      "type": "webhook",
-      "url": "https://your-server.com/webhook"
+    "filter_function": "'"$FILTER"'",
+    "filter_language": "javascript",
+    "region": "usa_east",
+    "start_range": 21000000,
+    "end_range": -1,
+    "dataset_batch_size": 1,
+    "elastic_batch_enabled": false,
+    "fix_block_reorgs": 0,
+    "status": "active",
+    "destination": "webhook",
+    "destination_attributes": {
+      "url": "https://your-server.com/webhook",
+      "compression": "none",
+      "max_retry": 3,
+      "retry_interval_sec": 1,
+      "post_timeout_sec": 10
     }
   }'
+```
+
+> All request fields are **snake_case**. `destination` is one of `webhook`,
+> `s3`, `azure`, `postgres`, `kafka`; its settings go in a separate
+> `destination_attributes` object. `region` is one of `usa_east`,
+> `europe_central`, `asia_east`. Required on create: `name`, `network`,
+> `dataset`, `filter_function`, `region`, `dataset_batch_size`,
+> `elastic_batch_enabled`, `destination`, `destination_attributes`, `status`.
+> `fix_block_reorgs` defaults to `0` (disabled) — set it explicitly if you need
+> reorg handling.
+
+### Test a Filter
+
+Runs a filter against a real historical block without creating a stream. It is
+read-only, costs nothing, and is the only way to confirm a filter works before
+deploying it. `block` must be a **string**.
+
+```bash
+FILTER=$(printf 'function main(stream) { return { blocks: stream.data.length }; }' | base64)
+
+curl -X POST https://api.quicknode.com/streams/rest/v1/streams/test_filter \
+  -H "x-api-key: $QUICKNODE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "network": "ethereum-mainnet",
+    "dataset": "logs",
+    "block": "21000000",
+    "filter_function": "'"$FILTER"'"
+  }'
+```
+
+A successful response is `{"logs": [...], "result": <your return value>}`, where
+`logs` holds anything the filter wrote to `console.log`. **If the filter throws,
+the call still returns HTTP 201** with the error nested inside `result`:
+
+```json
+{ "logs": [], "result": { "error": "Cannot read properties of undefined (reading '0')" } }
+```
+
+So always inspect `result.error` — a non-2xx status is not what signals a broken
+filter. The CLI equivalent is:
+
+```bash
+qn stream test-filter --network ethereum-mainnet --dataset logs \
+  --block 21000000 --filter-file ./filter.js --filter-language javascript
 ```
 
 ### List Streams
 
 ```bash
 curl https://api.quicknode.com/streams/rest/v1/streams \
-  -H "Authorization: Bearer $QUICKNODE_API_KEY"
+  -H "x-api-key: $QUICKNODE_API_KEY"
 ```
 
 ### Update Stream
 
 ```bash
 curl -X PATCH https://api.quicknode.com/streams/rest/v1/streams/{streamId} \
-  -H "Authorization: Bearer $QUICKNODE_API_KEY" \
+  -H "x-api-key: $QUICKNODE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "status": "paused"
@@ -441,7 +648,7 @@ curl -X PATCH https://api.quicknode.com/streams/rest/v1/streams/{streamId} \
 
 ```bash
 curl -X DELETE https://api.quicknode.com/streams/rest/v1/streams/{streamId} \
-  -H "Authorization: Bearer $QUICKNODE_API_KEY"
+  -H "x-api-key: $QUICKNODE_API_KEY"
 ```
 
 ## Best Practices
