@@ -230,7 +230,7 @@ products:
     skill_section: Quicknode MCP
     skill_reference: references/quicknode/mcp-reference.md
     coverage: full
-    notes: "Available through native Claude/OpenAI surfaces and generic MCP clients."
+    notes: "Available through native Claude/OpenAI surfaces and generic MCP clients. Covers read-only blockchain RPC via Tooling Access (call-rpc) plus account management."
   - name: Solana Validator
     slug: solana-validator
     category: Trading & DeFi
