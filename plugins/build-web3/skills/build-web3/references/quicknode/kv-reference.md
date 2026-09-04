@@ -105,6 +105,8 @@ const { data } = await response.json();
 // data → { key: 'threshold', value: '750000' }
 ```
 
+**Test:** `GET /sets/{key}` — `data` is `{ key, value }`. There is no top-level `value`, so destructuring `{ value }` yields `undefined`
+
 ### Write a value
 
 ```typescript
@@ -121,6 +123,8 @@ const response = await fetch('https://api.quicknode.com/kv/rest/v1/sets', {
 });
 ```
 
+**Test:** `POST /sets` — HTTP `201` with body `{ code: 200, msg: 'Key value stored', data: null }`
+
 ### List all set keys
 
 ```typescript
@@ -131,6 +135,8 @@ const response = await fetch(
 const { data, cursor } = await response.json();
 // data → [{ key: 'threshold', value: '750000' }, …]
 ```
+
+**Test:** `GET /sets` — top-level keys are `code`, `msg`, `data`, `cursor`, and `data` is an array. There is no `keys` field
 
 ### List operations
 
@@ -174,6 +180,8 @@ const response = await fetch(
 const { data: { exists } } = await response.json();
 ```
 
+**Test:** `GET /lists/{key}/contains/{item}` — `data` is `{ exists: true }` for a member and `{ exists: false }` for a non-member. There is no `contains` field
+
 `GET /lists` returns `{ data: { keys: [...] }, cursor }` — note `data` is an object here, while `GET /sets` returns `data` as an array.
 
 ## CLI — `qn kv`
@@ -212,6 +220,8 @@ qn kv list delete allowlist
 | Max key length | 255 characters |
 | Max value length | 800,000 characters |
 | Max items per list write | 1,500 (`addItems` + `removeItems` combined) |
+
+**Test:** boundary-probed — a 255-character key returns `201` and 256 returns `400`; an 800,000-character value returns `201` and 800,001 returns `400`; a 1,500-item write returns `200` and 1,501 returns `400` with `total of addItems and removeItems is 1501, max allowed is 1500`
 
 Exceeding a limit returns HTTP `400` with the limit named in `message`. Lists longer than 1,500 items are built with repeated writes; no total list length is enforced.
 
