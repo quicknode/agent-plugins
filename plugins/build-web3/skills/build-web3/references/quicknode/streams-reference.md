@@ -374,26 +374,27 @@ Streams filter functions can use the `qnLib` helper to persist state across invo
 
 > **Important:** All `qnLib` methods are asynchronous and return Promises. Declare your filter function as `async function main(stream)` and use `await` on all `qnLib` calls.
 
-Three `qnLib` signatures are easy to get wrong, and each one fails silently:
+Signatures and return values:
 
-| Call | Returns | Trap |
-|------|---------|------|
-| `qnContainsListItems(key, items)` | array of booleans, aligned to `items` by **position** | it does not return the matched values, so `result.includes(address)` and `new Set(result).has(address)` are always false |
-| `qnContainsListItem(key, item)` | a plain boolean | singular, easy to confuse with the plural form |
-| `qnAddSet(key, value)` | the string `"OK"` | takes exactly **two** arguments; a third is dropped without an error |
+| Call | Returns |
+|------|---------|
+| `qnContainsListItems(key, items)` | an array of booleans, aligned to `items` by position |
+| `qnContainsListItem(key, item)` | a boolean |
+| `qnGetList(key)` | an array of strings; `[]` for a key that does not exist |
+| `qnGetSet(key)` | a string; `null` for a key that does not exist |
+| `qnAddSet(key, value)` | the string `"OK"`. Arity is 2 |
 
-Every `qnLib` write helper returns `"OK"`, including when it writes nothing. Treat `"OK"` as "the call was accepted", not as "the write happened".
+Every `qnLib` write helper returns the string `"OK"`. The value reports that the call was accepted, not that it changed anything.
 
 ```javascript
 async function main(stream) {
-  // The outer dimension is the batch. Flatten it; never index stream.data[0].
+  // stream.data is the batch; each element is one block's transactions.
   const txs = stream.data.flatMap((block) => block);
 
-  // Dedupe so the membership call stays small.
+  // One membership call for the whole batch.
   const senders = [...new Set(txs.map((t) => t.from))];
 
-  // qnContainsListItems returns booleans aligned to `senders` by position.
-  // Map them back to addresses yourself.
+  // flags[i] corresponds to senders[i].
   const flags = await qnLib.qnContainsListItems('watchlist', senders);
   const watched = new Set(senders.filter((_, i) => flags[i]));
 
@@ -401,8 +402,7 @@ async function main(stream) {
   for (const tx of txs) {
     if (!watched.has(tx.from)) continue;
 
-    // qnAddSet takes exactly two arguments. Use one key per transaction:
-    // a single shared key would be overwritten on every hit.
+    // One key per transaction. qnAddSet(key, value) overwrites the key.
     await qnLib.qnAddSet(`watched:${tx.hash}`, JSON.stringify({
       from: tx.from,
       to: tx.to,
@@ -422,6 +422,8 @@ async function main(stream) {
   return hits.length ? hits : null;
 }
 ```
+
+**Test:** `ethereum-mainnet` · block `21000000` — 181 transactions, 169 unique senders; with two of them on `watchlist`, 2 `watchlist_hit` objects
 
 See the [Key-Value Store docs](https://www.quicknode.com/docs/key-value-store) for full `qnLib` method reference.
 
