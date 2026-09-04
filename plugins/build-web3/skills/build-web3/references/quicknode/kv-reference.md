@@ -16,14 +16,17 @@ Quicknode KV Store is a serverless storage service for lists and key-value sets.
 
 `qnLib` is available inside Streams filter functions without any import. All calls are asynchronous and should be awaited from an `async function main(...)` filter.
 
+Write helpers return the string `"OK"`. They return `"OK"` whether or not they changed anything, so the return value is not a success signal — read the value back to confirm. Option keys are snake_case (`add_items`, `remove_items`, `add_sets`, `delete_sets`); a camelCase key is ignored and the call still returns `"OK"`.
+
 ### List Operations
 
-Manage ordered lists of string items (e.g., a watchlist of wallet addresses).
+Manage lists of string items (e.g., a watchlist of wallet addresses). Items are returned sorted lexicographically, not in insertion order.
 
 ```javascript
-// Create or overwrite a list
+// Create a list, or merge items into an existing one
 await qnLib.qnUpsertList('my-watchlist', {
   add_items: ['0xAddr1', '0xAddr2'],
+  remove_items: [],
 });
 
 // Add a single item
@@ -32,13 +35,24 @@ await qnLib.qnAddListItem('my-watchlist', '0xAddr3');
 // Remove a single item
 await qnLib.qnRemoveListItem('my-watchlist', '0xAddr1');
 
-// Check membership (returns array of booleans, one per address)
-const results = await qnLib.qnContainsListItems('my-watchlist', ['0xAddr2', '0xAddr3']);
-// results → [true, true]
+// Read the list — returns a plain array of strings
+const items = await qnLib.qnGetList('my-watchlist');
+// items → ['0xAddr2', '0xAddr3']
 
-// Delete the entire list
+// All list keys on the account
+const listKeys = await qnLib.qnGetAllLists();
+
+// Check membership
+const one = await qnLib.qnContainsListItem('my-watchlist', '0xAddr2');
+// one → true
+const many = await qnLib.qnContainsListItems('my-watchlist', ['0xAddr2', '0xAddr3']);
+// many → [true, true]
+
+// Delete the entire list — a subsequent qnGetList returns []
 await qnLib.qnDeleteList('my-watchlist');
 ```
+
+`qnUpsertList` merges into an existing list; it does not replace it. Delete the list first to replace its contents.
 
 ### Set Operations
 
@@ -61,16 +75,24 @@ await qnLib.qnBulkSets({
   delete_sets: [],
 });
 
-// List all set keys
+// List all set keys — array of key strings
 const setKeys = await qnLib.qnListAllSets();
 
 // Delete a single set entry
 await qnLib.qnDeleteSet('threshold');
 ```
 
+`qnGetSet` returns `null` for a key that does not exist. `qnAddValue`, `qnGetValue`, `qnDeleteValue`, `qnBulkValues`, and `qnListAllKeys` are aliases for the `…Set`/`…Sets` helpers and behave identically.
+
+`qnLib` also exposes `getAccountId()`, and `signPayload`/`validatePayload` for webhook signatures.
+
 ## REST API
 
 All REST requests use `https://api.quicknode.com/kv/rest/v1/` and authenticate via the `x-api-key` header.
+
+Every response is wrapped in an envelope: `{ "code": 200, "msg": "…", "data": … }`, plus `cursor` on paginated reads. The payload is always under `data`. The envelope `code` is independent of the HTTP status — a successful write returns HTTP `201` with `code: 200`.
+
+Request bodies use camelCase (`addItems`, `removeItems`). A snake_case key is ignored and the request still returns `200`.
 
 ### Read a value
 
@@ -79,7 +101,8 @@ const response = await fetch(
   'https://api.quicknode.com/kv/rest/v1/sets/threshold',
   { headers: { 'x-api-key': process.env.QUICKNODE_API_KEY! } }
 );
-const { value } = await response.json();
+const { data } = await response.json();
+// data → { key: 'threshold', value: '750000' }
 ```
 
 ### Write a value
@@ -105,7 +128,8 @@ const response = await fetch(
   'https://api.quicknode.com/kv/rest/v1/sets',
   { headers: { 'x-api-key': process.env.QUICKNODE_API_KEY! } }
 );
-const { keys } = await response.json();
+const { data, cursor } = await response.json();
+// data → [{ key: 'threshold', value: '750000' }, …]
 ```
 
 ### List operations
@@ -124,13 +148,33 @@ await fetch('https://api.quicknode.com/kv/rest/v1/lists', {
   }),
 });
 
+// Read a list
+const listResponse = await fetch(
+  'https://api.quicknode.com/kv/rest/v1/lists/allowlist',
+  { headers: { 'x-api-key': process.env.QUICKNODE_API_KEY! } }
+);
+const { data } = await listResponse.json();
+// data → { items: ['0xabc', '0xdef'] }
+
+// Add or remove items on an existing list
+await fetch('https://api.quicknode.com/kv/rest/v1/lists/allowlist', {
+  method: 'PATCH',
+  headers: {
+    'x-api-key': process.env.QUICKNODE_API_KEY!,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ addItems: ['0x123'], removeItems: ['0xabc'] }),
+});
+
 // Check one item from outside a Stream filter
 const response = await fetch(
   'https://api.quicknode.com/kv/rest/v1/lists/allowlist/contains/0xabc',
   { headers: { 'x-api-key': process.env.QUICKNODE_API_KEY! } }
 );
-const { contains } = await response.json();
+const { data: { exists } } = await response.json();
 ```
+
+`GET /lists` returns `{ data: { keys: [...] }, cursor }` — note `data` is an object here, while `GET /sets` returns `data` as an array.
 
 ## CLI — `qn kv`
 
@@ -147,11 +191,17 @@ qn kv set ls
 # Delete a key
 qn kv set delete threshold
 
+# Add and/or delete several keys in one call
+qn kv set bulk --add threshold=750000 --delete old_threshold
+
 # Manage lists
+qn kv list ls
 qn kv list create allowlist 0xabc 0xdef
 qn kv list append allowlist 0x123
 qn kv list contains allowlist 0xabc
 qn kv list get allowlist
+qn kv list remove-item allowlist 0xabc
+qn kv list update allowlist --add 0x456 --remove 0xdef
 qn kv list delete allowlist
 ```
 
@@ -159,9 +209,11 @@ qn kv list delete allowlist
 
 | Limit | Value |
 |-------|-------|
-| Max value size | 64 KB |
-| Max list size | 10,000 items |
-| Max key length | 256 bytes |
+| Max key length | 255 characters |
+| Max value length | 800,000 characters |
+| Max items per list write | 1,500 (`addItems` + `removeItems` combined) |
+
+Exceeding a limit returns HTTP `400` with the limit named in `message`. Lists longer than 1,500 items are built with repeated writes; no total list length is enforced.
 
 Limits are subject to change — check https://www.quicknode.com/docs/key-value-store for current values.
 
