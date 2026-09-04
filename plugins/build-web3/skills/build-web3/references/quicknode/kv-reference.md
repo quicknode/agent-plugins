@@ -213,6 +213,29 @@ qn kv list update allowlist --add 0x456 --remove 0xdef
 qn kv list delete allowlist
 ```
 
+Every delete command needs `--yes` when no terminal is attached. Without it the
+command exits non-zero with `operation requires confirmation; pass --yes to
+proceed without an interactive prompt`, and nothing is deleted.
+
+With `-o json`, the CLI does not use one envelope. Two of these five reads put
+the payload at the top level, with no `data` wrapper:
+
+| Command | Shape |
+|---------|-------|
+| `qn kv set list` | `{ data: [{ key, value }], cursor }` |
+| `qn kv set get` | `{ value }` |
+| `qn kv list ls` | `{ data: { keys: [...] }, cursor }` |
+| `qn kv list get` | `{ data: { items: [...] }, cursor }` |
+| `qn kv list contains` | `{ exists }` |
+
+Read the field this table names for the command you ran. The REST envelope in
+the section above does not apply to CLI output.
+
+`qn kv set get` on a key that does not exist prints `Error: not found.` and
+exits non-zero. It does not return an empty value.
+
+**Test:** `qn kv set list` — 31 sets, each `{key, value}`; `qn kv list ls` — 14 lists under `data.keys`; `qn kv list contains <list> <absent>` — `{"exists": false}` at the top level
+
 ## Limits
 
 | Limit | Value |
