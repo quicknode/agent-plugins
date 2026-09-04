@@ -40,6 +40,8 @@ Streams Backfills use Quicknode Streams to retrieve historical blockchain data o
 
 Dataset slugs are kebab-case on the CLI and SDK and snake_case on the REST API: `trace-blocks` goes on the wire as `trace_blocks`. The EVM values are `block`, `block-with-receipts`, `transactions`, `logs`, `receipts`, `debug-traces`, `trace-blocks`, `block-with-receipts-debug-trace`, and `block-with-receipts-trace-block`. Availability can vary by chain and plan.
 
+**Test:** `ethereum-mainnet` · block `21000000` — all nine slugs above pass `qn stream test-filter`; `debug_trace` and `trace_block` are rejected by the CLI's own enum
+
 The CLI and SDK also offer `blob-sidecars`, which the API rejects. `block_with_beacon` is accepted by the API but is missing from both client enums, so it is reachable only over REST.
 
 `decodeEVMReceipts(receipts, abis)` is available as a global inside a Streams filter. `abis` is an array of ABI arrays, one per contract; a single ABI array passed directly throws `TypeError`. It returns the receipts with a `decodedLogs` array added to each one, and leaves `logs` untouched. Each entry in `decodedLogs` carries `name`, `address`, `blockNumber`, `transactionHash`, `logIndex`, and the decoded event parameters flattened alongside them. Receipts with no matching log get no entries.
@@ -51,6 +53,8 @@ Streams supports Solana historical slot ranges on paid plans. The dataset slugs 
 ### Bitcoin
 
 Bitcoin and Bitcoin Cash backfills use the `block` dataset with UTXO-oriented payloads, including Blockbook-backed block data. The network keys are `bitcoin-mainnet` and `bch-mainnet`.
+
+**Test:** `bitcoin-mainnet` and `bch-mainnet` · block `800000`, and `xrp-mainnet` · ledger `80000000` — all three pass `qn stream test-filter`; `bitcoin-cash-mainnet` and `xrpl-mainnet` are rejected with the full list of valid keys
 
 ## Cost and Performance
 
