@@ -87,7 +87,10 @@ if (!status.enabled) {
 
 // params defaults to []; pass an array (positional) or object (by name).
 const blockNumber = await qn.rpc.call("eth_blockNumber");
-const balance = await qn.rpc.call("eth_getBalance", ["0xabc...", "latest"]);
+const balance = await qn.rpc.call("eth_getBalance", [
+  "0xBE0eB53F46cd790Cd13851d5EFf43D12404d33E8",
+  "latest",
+]);
 
 // Multichain: seed the network map from admin.getEndpointUrls, then select
 // a network by its multichain_urls key as the 3rd argument.
@@ -140,7 +143,9 @@ for (const row of credits.data.slice(0, 5)) {
 }
 ```
 
-`accountInfo()` calls the Admin API account-info endpoint and returns details such as account id, name, creation timestamp, billing version, and current subscription. `getApiCredits(chain)` calls the per-chain API credits endpoint and returns `{ method, credits }` rows for the supplied chain slug. Use `listChains()` to discover valid chain slugs.
+`accountInfo()` calls the Admin API account-info endpoint and returns details such as account id, name, creation timestamp, billing version, and current subscription. `getApiCredits(chain)` calls the per-chain API credits endpoint and returns `{ method, credits }` rows for the supplied chain.
+
+`listChains()` returns short slugs (`eth`, `matic`, `sol`). `getApiCredits` accepts either the slug or the long name. The `rpc` client uses a third vocabulary, network keys such as `ethereum-mainnet`.
 
 ### Streams
 
@@ -165,8 +170,18 @@ const test = await qn.streams.testFilter({
   filterFunction,
 });
 
-console.log({ streams: streams.pageInfo.total, enabled: enabled.total, result: test.result });
+// test.result is a JSON-encoded string.
+const filtered = JSON.parse(test.result);
+
+console.log({
+  streams: streams.pageInfo.total,
+  enabled: enabled.total,
+  filtered,
+  logs: test.logs,
+});
 ```
+
+`testFilter` returns `{ result: string, logs: string[] }`, where `result` is the filter's output serialized as JSON. A filter that calls `console.log` makes `testFilter` throw `DecodeError`: the API returns each log entry as an object and the client decodes `logs` as strings, so `logs` only ever resolves to `[]`.
 
 ### Webhooks
 
@@ -199,6 +214,8 @@ if (sets.data.length > 0) {
 console.log({ sets: sets.data.length, lists: lists.data.keys.length });
 ```
 
+`getSets()` returns `{ data: [{ key, value }], cursor }` with `data` as an array; `getLists()` returns `{ data: { keys: [...] }, cursor }` with `data` as an object wrapping `keys`. `getSet(key)` returns `{ value }` as a string. List items come back sorted lexicographically, not in insertion order.
+
 ### SQL Explorer
 
 ```typescript
@@ -214,8 +231,11 @@ const result = await qn.sql.query(
 const schema = await qn.sql.getSchema("hyperliquid-core-mainnet");
 
 console.log(`${result.rows} rows, ${result.credits} credits`);
-console.log(schema);
+console.log(result.data); // the rows themselves
+console.log(schema.tables.map((t) => t.name));
 ```
+
+`query` returns `{ meta, data, rows, rowsBeforeLimitAtLeast, statistics, credits }`. `rows` is a count; the row objects are in `data`, keyed by the selected columns. `rowsBeforeLimitAtLeast` is the match count before `LIMIT`. `query` costs API credits on every call; `getSchema` is free.
 
 ## RPC Micropayments
 
@@ -287,12 +307,12 @@ quicknode-sdk = { version = "0.8", features = ["payments", "payments-svm", "paym
 ```typescript
 import { generatePaymentWallet } from "@quicknode/sdk";
 
-const wallet = generatePaymentWallet("evm"); // "evm" or "svm"
+const wallet = generatePaymentWallet("evm"); // "evm" | "svm" | "tempo"
 console.log("Fund this address:", wallet.address);
 // Persist wallet.key now. It cannot be recovered later.
 ```
 
-Use `evm` for x402 on EVM and for MPP on Tempo; use `svm` for x402 on Solana. Other bindings expose it as `generate_payment_wallet`.
+`chain` is typed `"evm" | "svm" | "tempo"`. Use `evm` for x402 on EVM, `svm` for x402 on Solana, and `evm` or `tempo` for MPP on Tempo — both return a secp256k1 hex key. Other bindings expose it as `generate_payment_wallet`.
 
 ### x402 Credit Drawdown
 
@@ -348,6 +368,22 @@ The gateway has no read-only channel endpoint, so it cannot reconstruct a lost l
 | `PaymentUnsupportedError` | The requested payment operation isn't available in this build (for example, a Rust binary compiled without the matching feature) |
 | `PaymentRejectedError` | The gateway refused the payment; nothing settled |
 | `PaymentIndeterminateError` | Outcome unknown — the payment may have settled. Check the wallet before retrying; never blind-retry a paid call |
+
+## Errors
+
+Every SDK call throws from one typed hierarchy rooted at `QuicknodeError`. All of these are named exports.
+
+| Error | Extra fields | Raised when |
+|-------|--------------|-------------|
+| `QuicknodeError` | — | Base class for every SDK error |
+| `ConfigError` | — | Bad or missing configuration — an unknown network key before `setNetworks`, an unknown payment chain |
+| `HttpError` | — | Transport failure |
+| `TimeoutError` | — | Extends `HttpError`. Request exceeded `QN_SDK__HTTP__TIMEOUT_SECS` |
+| `ConnectionError` | — | Extends `HttpError`. Could not reach the host |
+| `ApiError` | `status`, `body` | The API returned a non-2xx response |
+| `DecodeError` | `body` | The response could not be decoded into the expected shape |
+| `RpcError` | `code` | The JSON-RPC response carried an `error` member |
+| `PaymentError` | — | Base class for the payment lane (see the table above) |
 
 ## Other Languages
 
