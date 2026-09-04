@@ -127,6 +127,8 @@ try {
 // await qn.admin.disableToolingAccess();
 ```
 
+**Test:** `ethereum-mainnet` · block `latest` — `eth_getBalance` on that address returns a hex quantity; passing the truncated placeholder `0xabc...` instead throws `RpcError` with `code === -32602`
+
 ### Account Info and API Credits
 
 ```typescript
@@ -180,6 +182,8 @@ console.log({
   logs: test.logs,
 });
 ```
+
+**Test:** `ethereum-mainnet` · block `17811625` — `typeof test.result === "string"` and `test.logs` is `[]`; a filter calling `console.log` throws `DecodeError` instead
 
 `testFilter` returns `{ result: string, logs: string[] }`, where `result` is the filter's output serialized as JSON. A filter that calls `console.log` makes `testFilter` throw `DecodeError`: the API returns each log entry as an object and the client decodes `logs` as strings, so `logs` only ever resolves to `[]`.
 
@@ -311,6 +315,8 @@ const wallet = generatePaymentWallet("evm"); // "evm" | "svm" | "tempo"
 console.log("Fund this address:", wallet.address);
 // Persist wallet.key now. It cannot be recovered later.
 ```
+
+**Test:** offline, no network — `evm` and `tempo` return a 42-character `0x` address, `svm` a base58 address; any other value throws `ConfigError` naming all three
 
 `chain` is typed `"evm" | "svm" | "tempo"`. Use `evm` for x402 on EVM, `svm` for x402 on Solana, and `evm` or `tempo` for MPP on Tempo — both return a secp256k1 hex key. Other bindings expose it as `generate_payment_wallet`.
 

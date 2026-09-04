@@ -129,6 +129,8 @@ echo '[{"to": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", "data": "0x18160ddd"
 cat params.json | qn rpc call eth_call -f -
 ```
 
+**Test:** `ethereum-mainnet` · block `latest` — `eth_getBalance` returns a hex quantity, and the piped `eth_call` returns USDC `totalSupply()` as one 32-byte hex word
+
 `--network <KEY>` selects a network on the multichain endpoint (e.g. `base-mainnet`, `solana-mainnet`, `polygon`, `btc`). Omit it for the default network. `qn rpc list-networks` (alias `ls`) lists available keys — no RPC call made.
 
 ```bash
@@ -454,6 +456,8 @@ qn stream test-filter \
   --block 17811625 \
   --filter-file filter.js
 ```
+
+**Test:** `ethereum-mainnet` · block `17811625` — `result` is a JSON string holding the filter's return value, and `logs` is `[]`
 
 `test-filter` prints `{ "result": ..., "logs": [] }`, where `result` is the filter's return value as a JSON-encoded string, not an object.
 
