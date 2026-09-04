@@ -66,13 +66,17 @@ Set output with `--format` or `-o`.
 
 With `--format` unset the CLI reads `[output] format` from the config file, then defaults to `table` on a TTY and `json` when stdout is piped. `--wide`/`-w` affects only `table` and `md`.
 
+**The piped default is not universal.** `qn rpc list-networks` prints a bare
+newline-separated list of slugs even when piped, with no JSON. A script that
+pipes it and parses JSON fails. Pass `-o json` explicitly for that command.
+
 ```bash
 qn endpoint list --format json
 qn usage summary --from 7d -o yaml
 qn endpoint list --wide
 ```
 
-**Test:** `qn endpoint list | head -c 1` — prints `{`. Piped output defaults to `json`, not `table`, so a script never has to pass `-o json`
+**Test:** `qn endpoint list | head -c 1`, `qn chain list | head -c 1`, and `qn kv set list | head -c 1` all print `{`; `qn rpc list-networks | head -c 1` prints `0`, the first character of `0g-galileo`. The piped default holds for three of these four commands and not for the fourth
 
 ## Exit Codes
 
@@ -122,6 +126,11 @@ qn auth login
 qn rpc call eth_getBlockByNumber '["latest", false]' --network base-mainnet
 ```
 
+With `-o json` the CLI prints the JSON-RPC `result` **unwrapped**. There is no
+`jsonrpc`, `id`, or `result` field to read past.
+
+**Test:** `base-mainnet` · block `latest` — `-o json` prints the block object itself at the top level, keyed `baseFeePerGas` through `withdrawalsRoot`, with no `jsonrpc`, `id`, or `result` wrapper; `transactions` holds hashes, not objects, because the second parameter is `false`
+
 Params: positional (JSON array), by name (JSON object), from a file, or from stdin.
 
 ```bash
@@ -142,6 +151,8 @@ qn rpc list-networks
 qn rpc list-networks -o json
 ```
 
+**Test:** `qn rpc list-networks` — one network key per line, sorted, `0g-galileo` first and `zora-mainnet` last (132 keys on 2026-09-04; the count grows, so do not gate on it). With `-o json` the payload is `{"networks": [...]}`. It is **not** the `data` envelope the other list commands use, so `.data` is `undefined`
+
 `--endpoint-url <URL>` sends the call to a self-authenticating URL instead of the Tooling Access endpoint, overriding `[rpc] endpoint_url` in `~/.config/qn/config.toml`. Mutually exclusive with `--network`.
 
 First-run `qn rpc call` prompts `[y/N]` to enable Tooling Access if it isn't provisioned yet. Pass `-y`/`--yes` to auto-confirm non-interactively.
@@ -149,6 +160,8 @@ First-run `qn rpc call` prompts `[y/N]` to enable Tooling Access if it isn't pro
 ```bash
 qn rpc call eth_blockNumber --network base-mainnet -y
 ```
+
+**Test:** `base-mainnet` · block `latest` — returns a bare JSON string such as `"0x308471d"`, not an object. `-y` exits `0` and prompts nothing when Tooling Access is already enabled, so it is safe to pass unconditionally in a script
 
 ### Paid RPC (x402 and MPP)
 
