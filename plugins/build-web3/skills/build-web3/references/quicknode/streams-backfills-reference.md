@@ -16,21 +16,21 @@ Streams Backfills use Quicknode Streams to retrieve historical blockchain data o
 
 1. Select the chain and network supported by Streams.
 2. Pick the dataset, such as EVM blocks, logs, receipts, traces, Solana blocks, Bitcoin blocks, or XRPL ledgers.
-3. Define the start block/slot and end block/slot, or configure the Stream to continue into live delivery.
+3. Define the start block/slot and end block/slot. Set the end to `-1` to run the range and then continue into live delivery.
 4. Add a filter function when only a subset of the data should be delivered.
 5. Configure batching and compression for high-volume historical delivery.
-6. Choose a destination such as Webhook, S3, PostgreSQL, Azure Storage, or another Streams destination.
+6. Choose a destination: `webhook`, `s3`, `azure`, `postgres`, or `kafka`.
 7. Test the destination and filter, then start the Stream.
 
 ## What an Agent Should Ask For
 
 | Field | Required | Notes |
 |-------|----------|-------|
-| Chain/network | Yes | Example: `ethereum-mainnet`, `base-mainnet`, `solana-mainnet` |
-| Dataset | Yes | Block, transactions, logs, receipts, traces, or chain-specific dataset |
+| Chain/network | Yes | `<chain>-<network>`, e.g. `ethereum-mainnet`, `base-mainnet`, `solana-mainnet`, `bch-mainnet`, `xrp-mainnet`. An invalid key is rejected with the full list of valid keys |
+| Dataset | Yes | Kebab-case slug, e.g. `block`, `transactions`, `logs`, `receipts`, `trace-blocks` |
 | Start block/slot | Yes | Historical lower bound |
-| End block/slot | Yes | Historical upper bound, or continue to live delivery |
-| Destination | Yes | Webhook, S3, PostgreSQL, Azure Storage, etc. |
+| End block/slot | Yes | Historical upper bound. `-1` runs the backfill then continues into live delivery |
+| Destination | Yes | One of `webhook`, `s3`, `azure`, `postgres`, `kafka` |
 | Filter function | Optional | Use for server-side filtering/transformation |
 | Batching/compression | Recommended | Important for high-volume backfills |
 
@@ -38,32 +38,38 @@ Streams Backfills use Quicknode Streams to retrieve historical blockchain data o
 
 ### EVM Chains
 
-Common datasets include Block, Block with Receipts, Transactions, Logs, Receipts, Traces (`debug_trace`), Traces (`trace_block`), and composite block/receipt/trace datasets. Availability can vary by chain and plan.
+Dataset slugs are kebab-case on the CLI and SDK and snake_case on the REST API: `trace-blocks` goes on the wire as `trace_blocks`. The EVM values are `block`, `block-with-receipts`, `transactions`, `logs`, `receipts`, `debug-traces`, `trace-blocks`, `block-with-receipts-debug-trace`, and `block-with-receipts-trace-block`. Availability can vary by chain and plan.
 
-Useful helper: `decodeEVMReceipts` can decode EVM receipts with contract ABIs inside a Streams filter.
+**Test:** `ethereum-mainnet` · block `21000000` — all nine slugs above pass `qn stream test-filter`; `debug_trace` and `trace_block` are rejected by the CLI's own enum
+
+The CLI and SDK also offer `blob-sidecars`, which the API rejects. `block_with_beacon` is accepted by the API but is missing from both client enums, so it is reachable only over REST.
+
+`decodeEVMReceipts(receipts, abis)` is available as a global inside a Streams filter. `abis` is an array of ABI arrays, one per contract; a single ABI array passed directly throws `TypeError`. It returns the receipts with a `decodedLogs` array added to each one, and leaves `logs` untouched. Each entry in `decodedLogs` carries `name`, `address`, `blockNumber`, `transactionHash`, `logIndex`, and the decoded event parameters flattened alongside them. Receipts with no matching log get no entries.
 
 ### Solana
 
-Streams supports Solana historical slot ranges on paid plans. Common datasets include Block and Programs + Logs. Very large Solana backfills should usually be scoped to a specific time window, account, program, or filter.
+Streams supports Solana historical slot ranges on paid plans. The dataset slugs are `block` and `programs-with-logs`. Very large Solana backfills should usually be scoped to a specific time window, account, program, or filter.
 
 ### Bitcoin
 
-Bitcoin and Bitcoin Cash backfills use UTXO-oriented block data, including Blockbook-backed block payloads.
+Bitcoin and Bitcoin Cash backfills use the `block` dataset with UTXO-oriented payloads, including Blockbook-backed block data. The network keys are `bitcoin-mainnet` and `bch-mainnet`.
+
+**Test:** `bitcoin-mainnet` and `bch-mainnet` · block `800000`, and `xrp-mainnet` · ledger `80000000` — all three pass `qn stream test-filter`; `bitcoin-cash-mainnet` and `xrpl-mainnet` are rejected with the full list of valid keys
 
 ## Cost and Performance
 
 - Backfills consume API credits based on blocks processed and dataset multipliers.
 - Filtering reduces delivered payloads, but credits are still based on processed blocks.
-- Use the Streams API Credits Calculator before large backfills.
-- Increase batch size for historical ingestion when the destination can handle larger payloads.
-- Enable gzip compression for large payloads.
-- Use Elastic Batch if the Stream should transition from historical catch-up into low-latency live delivery.
+- Credits are charged as network x dataset multiplier x blocks processed. The API Credits Calculator is on https://www.quicknode.com/docs/streams/billing.
+- Increase `datasetBatchSize` (CLI `--batch-size`) for historical ingestion when the destination can handle larger payloads.
+- Set `compression` to `gzip` for large payloads. Compression is a destination attribute, not a Stream-level setting, and Kafka names the field `compressionType`.
+- Set `elasticBatchEnabled` (CLI `--elastic-batch-enabled true`) if the Stream should transition from historical catch-up into low-latency live delivery.
 
 ## Automation Guidance
 
-Use the Quicknode Streams REST API, SDK, or CLI to create and manage Streams programmatically. The current public docs describe Backfills as a Streams configuration/workflow, not as a separate Backfills REST resource. Agents should create or duplicate a Stream with the desired historical range rather than calling invented `/backfills` endpoints.
+Use the Quicknode Streams REST API, SDK, or CLI to create and manage Streams programmatically. Backfills are a Streams configuration, not a separate REST resource: there is no `/backfills` endpoint. Create a Stream with the desired historical range instead.
 
-CLI example:
+CLI example, webhook destination:
 
 ```bash
 qn stream create \
@@ -75,6 +81,8 @@ qn stream create \
   --region usa-east \
   --webhook https://example.com/streams
 ```
+
+`qn stream create` builds a webhook destination only. For `s3`, `azure`, `postgres`, or `kafka`, pass `--stream-config-file <path>` holding a full `CreateStreamParams` JSON object; every other flag is ignored when it is supplied. In that object `startRange`, `endRange`, `datasetBatchSize`, and `elasticBatchEnabled` are required, and `compression` sits inside `destinationAttributes`.
 
 ## Documentation
 
