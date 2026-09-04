@@ -374,18 +374,36 @@ Streams filter functions can use the `qnLib` helper to persist state across invo
 
 > **Important:** All `qnLib` methods are asynchronous and return Promises. Declare your filter function as `async function main(stream)` and use `await` on all `qnLib` calls.
 
+Three `qnLib` signatures are easy to get wrong, and each one fails silently:
+
+| Call | Returns | Trap |
+|------|---------|------|
+| `qnContainsListItems(key, items)` | array of booleans, aligned to `items` by **position** | it does not return the matched values, so `result.includes(address)` and `new Set(result).has(address)` are always false |
+| `qnContainsListItem(key, item)` | a plain boolean | singular, easy to confuse with the plural form |
+| `qnAddSet(key, value)` | the string `"OK"` | takes exactly **two** arguments; a third is dropped without an error |
+
+Every `qnLib` write helper returns `"OK"`, including when it writes nothing. Treat `"OK"` as "the call was accepted", not as "the write happened".
+
 ```javascript
 async function main(stream) {
-  const txs = stream.data.flatMap(block => block);
+  // The outer dimension is the batch. Flatten it; never index stream.data[0].
+  const txs = stream.data.flatMap((block) => block);
+
+  // Dedupe so the membership call stays small.
   const senders = [...new Set(txs.map((t) => t.from))];
 
-  const watched = new Set(await qnLib.qnContainsListItems('watchlist', senders));
+  // qnContainsListItems returns booleans aligned to `senders` by position.
+  // Map them back to addresses yourself.
+  const flags = await qnLib.qnContainsListItems('watchlist', senders);
+  const watched = new Set(senders.filter((_, i) => flags[i]));
 
   const hits = [];
   for (const tx of txs) {
     if (!watched.has(tx.from)) continue;
-    // Store the transaction hash in a set for later retrieval
-    await qnLib.qnAddSet('watched_txs', tx.hash, JSON.stringify({
+
+    // qnAddSet takes exactly two arguments. Use one key per transaction:
+    // a single shared key would be overwritten on every hit.
+    await qnLib.qnAddSet(`watched:${tx.hash}`, JSON.stringify({
       from: tx.from,
       to: tx.to,
       value: tx.value,
