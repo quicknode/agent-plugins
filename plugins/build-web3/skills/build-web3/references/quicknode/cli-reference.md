@@ -50,6 +50,8 @@ qn agent context
 qn agent context -o json
 ```
 
+**Test:** `qn agent context` with `QN_API_KEY` empty — 370 lines of Markdown titled `# qn — usage guide for agents`, with 9 `##` sections. It succeeds with no key, which is how you confirm it needs no authentication
+
 ## Output Formats
 
 Set output with `--format` or `-o`.
@@ -69,6 +71,8 @@ qn endpoint list --format json
 qn usage summary --from 7d -o yaml
 qn endpoint list --wide
 ```
+
+**Test:** `qn endpoint list | head -c 1` — prints `{`. Piped output defaults to `json`, not `table`, so a script never has to pass `-o json`
 
 ## Exit Codes
 
@@ -536,6 +540,11 @@ qn kv list remove-item allowlist 0x123
 qn kv list update allowlist --add 0x456 --remove 0xabc
 qn kv list delete allowlist
 ```
+
+Every `delete` needs `--yes` when no terminal is attached. Without it the command
+exits non-zero and deletes nothing.
+
+**Test:** `qn kv set list` — `data` is an **array** of `{key, value}`; `qn kv list list` — `data` is an **object** with a `keys` array. The two commands do not share a response shape
 
 ### SQL Explorer
 
