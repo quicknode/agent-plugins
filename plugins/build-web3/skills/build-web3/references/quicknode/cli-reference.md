@@ -50,6 +50,8 @@ qn agent context
 qn agent context -o json
 ```
 
+**Test:** `qn agent context` with `QN_API_KEY` empty — 370 lines of Markdown titled `# qn — usage guide for agents`, with 9 `##` sections. It succeeds with no key, which is how you confirm it needs no authentication
+
 ## Output Formats
 
 Set output with `--format` or `-o`.
@@ -62,13 +64,31 @@ Set output with `--format` or `-o`.
 | `md` | Markdown tables for issues and docs |
 | `toon` | Compact LLM-oriented structured output |
 
-Examples:
+With `--format` unset the CLI reads `[output] format` from the config file, then defaults to `table` on a TTY and `json` when stdout is piped. `--wide`/`-w` affects only `table` and `md`.
+
+**The piped default is not universal.** `qn rpc list-networks` prints a bare
+newline-separated list of slugs even when piped, with no JSON. A script that
+pipes it and parses JSON fails. Pass `-o json` explicitly for that command.
 
 ```bash
 qn endpoint list --format json
 qn usage summary --from 7d -o yaml
 qn endpoint list --wide
 ```
+
+**Test:** `qn endpoint list | head -c 1`, `qn chain list | head -c 1`, and `qn kv set list | head -c 1` all print `{`; `qn rpc list-networks | head -c 1` prints `0`, the first character of `0g-galileo`. The piped default holds for three of these four commands and not for the fourth
+
+## Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | Success |
+| `1` | Usage error — bad flag, missing argument, unparseable value |
+| `2` | API or request error — the server rejected the call (also plan-gated features, and drawdown credit exhaustion) |
+| `3` | Indeterminate outcome on a paid call — the request was sent but the response was lost; the wallet may already be charged |
+| `4` | No credentials — no `--api-key`, no `--config-file`, no `~/.config/qn/config.toml` |
+| `5` | Gated command refused — a destructive command ran in a non-TTY without `--yes`, before any request was sent |
+| `130` | Interrupted (SIGINT) |
 
 ## Command Groups
 
@@ -106,16 +126,23 @@ qn auth login
 qn rpc call eth_getBlockByNumber '["latest", false]' --network base-mainnet
 ```
 
+With `-o json` the CLI prints the JSON-RPC `result` **unwrapped**. There is no
+`jsonrpc`, `id`, or `result` field to read past.
+
+**Test:** `base-mainnet` · block `latest` — `-o json` prints the block object itself at the top level, keyed `baseFeePerGas` through `withdrawalsRoot`, with no `jsonrpc`, `id`, or `result` wrapper; `transactions` holds hashes, not objects, because the second parameter is `false`
+
 Params: positional (JSON array), by name (JSON object), from a file, or from stdin.
 
 ```bash
 qn rpc call eth_blockNumber
-qn rpc call eth_getBalance '["0xabc...", "latest"]'
+qn rpc call eth_getBalance '["0xBE0eB53F46cd790Cd13851d5EFf43D12404d33E8", "latest"]'
 qn rpc call getSlot --network solana-mainnet
 qn rpc call eth_call --params-file params.json
-echo '[...]' | qn rpc call eth_call -
+echo '[{"to": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", "data": "0x18160ddd"}, "latest"]' | qn rpc call eth_call -
 cat params.json | qn rpc call eth_call -f -
 ```
+
+**Test:** `ethereum-mainnet` · block `latest` — `eth_getBalance` returns a hex quantity, and the piped `eth_call` returns USDC `totalSupply()` as one 32-byte hex word
 
 `--network <KEY>` selects a network on the multichain endpoint (e.g. `base-mainnet`, `solana-mainnet`, `polygon`, `btc`). Omit it for the default network. `qn rpc list-networks` (alias `ls`) lists available keys — no RPC call made.
 
@@ -124,6 +151,8 @@ qn rpc list-networks
 qn rpc list-networks -o json
 ```
 
+**Test:** `qn rpc list-networks` — one network key per line, sorted, `0g-galileo` first and `zora-mainnet` last (132 keys on 2026-09-04; the count grows, so do not gate on it). With `-o json` the payload is `{"networks": [...]}`. It is **not** the `data` envelope the other list commands use, so `.data` is `undefined`
+
 `--endpoint-url <URL>` sends the call to a self-authenticating URL instead of the Tooling Access endpoint, overriding `[rpc] endpoint_url` in `~/.config/qn/config.toml`. Mutually exclusive with `--network`.
 
 First-run `qn rpc call` prompts `[y/N]` to enable Tooling Access if it isn't provisioned yet. Pass `-y`/`--yes` to auto-confirm non-interactively.
@@ -131,6 +160,8 @@ First-run `qn rpc call` prompts `[y/N]` to enable Tooling Access if it isn't pro
 ```bash
 qn rpc call eth_blockNumber --network base-mainnet -y
 ```
+
+**Test:** `base-mainnet` · block `latest` — returns a bare JSON string such as `"0x308471d"`, not an object. `-y` exits `0` and prompts nothing when Tooling Access is already enabled, so it is safe to pass unconditionally in a script
 
 ### Paid RPC (x402 and MPP)
 
@@ -174,7 +205,9 @@ qn rpc mpp supported-networks
 qn rpc mpp supported-payments
 ```
 
-Use a slug from `supported-networks` as `--network`. Use a row from `supported-payments` — it returns the payment network, asset symbol, and token address — as `--payment-network` and `--payment-asset`. Query these instead of hardcoding a network or asset list.
+Use a slug from `supported-networks` as `--network`. Use a row from `supported-payments` as `--payment-network` and `--payment-asset`. Query these instead of hardcoding a network or asset list.
+
+Rows carry `network` and `address`; `asset` is optional. `network` is a slug (`base-sepolia`) or a raw CAIP-2 id (`eip155:1952`). `--payment-asset` accepts a symbol or a contract address/mint.
 
 The query network and the payment network are independent. `--network ethereum-mainnet` with `--payment-network base-sepolia` pays on Base Sepolia for an Ethereum Mainnet read.
 
@@ -327,6 +360,8 @@ qn endpoint log-details <endpoint-id> <request-id>
 qn endpoint metrics <endpoint-id> --metric method_calls_over_time --period day
 ```
 
+On plans that do not support logging, they exit `2` reporting `unauthorized. Check your API key`; `-v` shows the details.
+
 Commands that create, update, pause, resume, archive, enable or disable multichain, or change endpoint security/rate limits mutate endpoint state.
 
 ```bash
@@ -439,6 +474,14 @@ qn stream test-filter \
   --filter-file filter.js
 ```
 
+**Test:** `ethereum-mainnet` · block `17811625` — `result` is a JSON string holding the filter's return value, and `logs` is `[]`
+
+`test-filter` prints `{ "result": ..., "logs": [] }`, where `result` is the filter's return value as a JSON-encoded string, not an object.
+
+A filter that calls `console.log` makes the command fail with `Error: unexpected response shape from API.` and exit `1`. The request itself succeeds — the API returns HTTP `201` with each log entry as a `{ "level", "message" }` object, which the client decodes as a string and rejects, so `logs` only ever renders as `[]`. Filters run through the CLI or the SDK must not call `console.log`.
+
+The filter file exports `main(stream)`. For the `block` dataset `stream.data` is an array of blocks, one per batch entry.
+
 Create and lifecycle commands change Stream state and may prompt:
 
 ```bash
@@ -469,8 +512,10 @@ qn webhook create \
   --url https://example.com/webhook \
   --compression none \
   --template evm-wallet \
-  --wallet 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48
+  --wallet 0xBE0eB53F46cd790Cd13851d5EFf43D12404d33E8
 ```
+
+Pass `--wallet` once per address. `--wallets-list-name <name>` is the alternative: it reads the addresses from a saved Key-Value Store list instead.
 
 Webhook lifecycle and update commands:
 
@@ -496,7 +541,7 @@ qn kv set delete mykey
 qn kv set bulk --add threshold=750000 --delete old_threshold
 ```
 
-Lists store ordered values under one key:
+Lists store multiple values under one key. `qn kv list get` returns items sorted lexicographically, not in insertion order:
 
 ```bash
 qn kv list list
@@ -509,6 +554,11 @@ qn kv list update allowlist --add 0x456 --remove 0xabc
 qn kv list delete allowlist
 ```
 
+Every `delete` needs `--yes` when no terminal is attached. Without it the command
+exits non-zero and deletes nothing.
+
+**Test:** `qn kv set list` — `data` is an **array** of `{key, value}`; `qn kv list list` — `data` is an **object** with a `keys` array. The two commands do not share a response shape
+
 ### SQL Explorer
 
 ```bash
@@ -518,6 +568,8 @@ qn sql query "SELECT * FROM hyperliquid_trades LIMIT 100" --cluster-id hyperliqu
 qn sql query --file query.sql --cluster-id hyperliquid-core-mainnet
 qn sql query --file - --cluster-id hyperliquid-core-mainnet
 ```
+
+`qn sql query` costs API credits on every call; `qn sql schema` is free.
 
 ### Account Operations
 
@@ -536,7 +588,16 @@ qn billing payments
 qn completions zsh
 ```
 
-`qn chain credits <chain>` returns the per-method API credit costs for that chain, using the same chain slugs returned by `qn chain list`. Use it when an agent needs account-aware credit costs instead of hardcoding method multipliers.
+`qn chain credits <chain>` returns the per-method API credit costs for that chain. Use it when an agent needs account-aware credit costs.
+
+The CLI uses three chain vocabularies:
+
+| Where | Vocabulary | Examples |
+|-------|-----------|----------|
+| `qn chain list` | short slugs | `eth`, `matic`, `sol`, `btc` |
+| `qn chain credits <chain>` | accepts either the short slug or the long name | `eth` or `ethereum`, `sol` or `solana` |
+| `qn endpoint create --chain` | long names | `ethereum`, `solana` |
+| `qn rpc call --network` / `qn rpc list-networks` | network keys | `ethereum-mainnet`, `base-mainnet`, `solana-mainnet`, `polygon`, `btc` |
 
 ## Confirmation Behavior
 
