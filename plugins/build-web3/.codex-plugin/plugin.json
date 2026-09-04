@@ -1,6 +1,6 @@
 {
   "name": "build-web3",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Build and improve Web3 apps with architecture guidance and optional Quicknode tools for live blockchain data and infrastructure management.",
   "author": {
     "name": "Quicknode",
